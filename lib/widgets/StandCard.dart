@@ -1,0 +1,44 @@
+import 'package:flutter/material.dart';
+
+class StandCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(padding: EdgeInsets.all(8), child: StandContent()),
+    );
+  }
+}
+
+class StandContent extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("NITPY Boys Hostel", style: theme.textTheme.headline6),
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 2,
+          children: [
+            Icon(Icons.straighten, color: Colors.grey),
+            Text("588m", style: theme.textTheme.caption),
+          ],
+        ),
+        SizedBox(height: 8),
+        OutlinedButton.icon(
+          icon: Icon(Icons.navigation),
+          label: Text("DIRECTIONS", style: theme.textTheme.button),
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Not Yet Implemented"),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}

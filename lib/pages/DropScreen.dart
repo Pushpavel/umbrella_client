@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:umbrella_client/widgets/OwnedUmbrellaCard.dart';
 import 'package:umbrella_client/widgets/SelectedStandCard.dart';
