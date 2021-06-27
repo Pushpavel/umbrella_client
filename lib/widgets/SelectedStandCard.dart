@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:umbrella_client/models/Stand.dart';
+import 'package:umbrella_client/resources/Routes.dart';
 import 'package:umbrella_client/services/StandService.dart';
 
 import 'StandCard.dart';
@@ -28,7 +29,10 @@ class SelectedStandCard extends StatelessWidget {
             ],
           ),
         ),
-        onTap: () => {},
+        onTap: () => {
+          Navigator.push(context,
+              MaterialPageRoute(builder: Routes.standList(standService)))
+        },
       ),
     );
   }
