@@ -1,19 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:umbrella_client/models/Stand.dart';
 
-class StandCard extends StatelessWidget {
-  final Stand stand;
-
-  const StandCard(this.stand);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(padding: EdgeInsets.all(8), child: StandContent(stand)),
-    );
-  }
-}
-
 class StandContent extends StatelessWidget {
   final Stand stand;
 
