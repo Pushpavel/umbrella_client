@@ -31,8 +31,7 @@ class SelectedStandCard extends StatelessWidget {
           MaterialPageRoute(
               builder: Routes.standList(standService.getStands())),
         );
-
-        standService.selectStand(selectedStand);
+        if (selectedStand != null) standService.selectStand(selectedStand);
       },
     );
   }
