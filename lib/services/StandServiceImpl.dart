@@ -1,32 +1,27 @@
-
+import 'dart:async';
 import 'dart:collection';
 
+import 'package:rxdart/rxdart.dart';
 import 'package:umbrella_client/models/Stand.dart';
 import 'package:umbrella_client/services/StandService.dart';
 
-class StandServiceImpl extends StandService{
-  @override
-  Stream<Stand> getSelectedStand() {
-    // TODO: implement getSelectedStand
-    throw UnimplementedError();
+class StandServiceImpl implements StandService {
+  final Stream<UnmodifiableListView<Stand>> _stands$ =
+      Stream.value(UnmodifiableListView([Stand("stand1"), Stand("stand2")]))
+          .shareReplay();
+
+  late final _selectedStand$ = BehaviorSubject<Stand>();
+
+  StandServiceImpl() {
+    _selectedStand$
+        .addStream(_stands$.map((list) => list.first).first.asStream());
   }
 
-  @override
-  Stream<UnmodifiableListView<Stand>> getStands() {
-    // TODO: implement getStands
-    throw UnimplementedError();
-  }
+  Stream<Stand> getSelectedStand() => _selectedStand$;
 
-  @override
-  selectStand(Stand stand) {
-    // TODO: implement selectStand
-    throw UnimplementedError();
-  }
+  Stream<UnmodifiableListView<Stand>> getStands() => _stands$;
 
-  @override
-  dispose() {
-    // TODO: implement dispose
-    throw UnimplementedError();
-  }
+  selectStand(Stand stand) => _selectedStand$.sink.add(stand);
 
+  dispose() => _selectedStand$.close();
 }
