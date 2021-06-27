@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:umbrella_client/models/Stand.dart';
 
 import 'StandCard.dart';
 
@@ -12,7 +13,7 @@ class SelectedStandCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              StandContent(),
+              StandContent(Stand("Nitpy Boys Hostel")),
               Icon(Icons.unfold_more),
             ],
           ),
