@@ -1,4 +1,7 @@
+import 'dart:collection';
+
 import 'package:provider/provider.dart';
+import 'package:umbrella_client/models/Stand.dart';
 import 'package:umbrella_client/pages/DropScreen.dart';
 import 'package:umbrella_client/pages/PickupScreen.dart';
 import 'package:umbrella_client/pages/StandListScreen.dart';
@@ -17,10 +20,6 @@ class Routes {
       );
 
   // StandListScreen
-  static standList(StandService standService) {
-    return (_) => Provider<StandService>.value(
-          value: standService,
-          child: StandListScreen(),
-        );
-  }
+  static standList(Stream<UnmodifiableListView<Stand>> stands) =>
+      (_) => StandListScreen(stands);
 }

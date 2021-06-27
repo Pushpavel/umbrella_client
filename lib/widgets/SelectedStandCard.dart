@@ -25,11 +25,14 @@ class SelectedStandCard extends StatelessWidget {
           Icon(Icons.unfold_more),
         ],
       ),
-      onClick: () {
-        Navigator.push(
+      onClick: () async {
+        var selectedStand = await Navigator.push(
           context,
-          MaterialPageRoute(builder: Routes.standList(standService)),
+          MaterialPageRoute(
+              builder: Routes.standList(standService.getStands())),
         );
+
+        standService.selectStand(selectedStand);
       },
     );
   }
