@@ -17,7 +17,7 @@ class StandCard extends StatelessWidget {
 class StandContent extends StatelessWidget {
   final Stand stand;
 
-  StandContent(this.stand);
+  const StandContent(this.stand);
 
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
