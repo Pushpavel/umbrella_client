@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-void main() {
-  runApp(MyApp());
-}
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+class _MyStatefulWidgetState extends State<TimerScreen> {
   final Stream<int> _bids = (() async* {
     for(var time = 15; time>=0; time--){
     await Future<void>.delayed(const Duration(seconds: 1));
@@ -72,7 +69,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 case ConnectionState.active:
                   children = <Widget>[
                     const Icon(
-                      Icons.access_time_filled_outlined,
+                      Icons.access_time_rounded,
                       color: Colors.green,
                       size: 60,
                     ),
@@ -85,7 +82,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 case ConnectionState.done:
                   children = <Widget>[
                     const Icon(
-                      Icons.access_time_filled_rounded,
+                      Icons.access_time_rounded,
                       color: Colors.red,
                       size: 60,
                     ),
@@ -110,18 +107,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   }
 }
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: MyStatefulWidget(),
-      
-    );
-  }
-}
-class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({Key? key}) : super(key: key);
+class TimerScreen extends StatefulWidget {
+  const TimerScreen({Key? key}) : super(key: key);
 
   @override
-  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
+  State<TimerScreen> createState() => _MyStatefulWidgetState();
 }
