@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:umbrella_client/pages/SplashScreen.dart';
 import 'package:umbrella_client/resources/AppThemeData.dart';
 import 'package:umbrella_client/resources/Providers.dart';
+import 'package:umbrella_client/resources/Routes.dart';
+import 'package:umbrella_client/services/AuthService.dart';
 
 void main() => runApp(MultiProvider(
       providers: [Providers.authService(), Providers.standService()],
@@ -12,6 +14,19 @@ void main() => runApp(MultiProvider(
       ),
     ));
 
-void onInit(BuildContext context) {
-  // TODO: redirect to appropriate screen
+void onInit(BuildContext context) async {
+  var auth = Provider.of<AuthService>(context);
+
+  var user = await auth.getUser().first;
+
+  if (user != null)
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: Routes.pickup, maintainState: false),
+    );
+  else
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: Routes.login, maintainState: false),
+    );
 }

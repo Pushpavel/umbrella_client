@@ -7,7 +7,7 @@ import 'package:umbrella_client/pages/PickupScreen.dart';
 import 'package:umbrella_client/pages/StandListScreen.dart';
 import 'package:umbrella_client/resources/Providers.dart';
 
-class Routes {
+abstract class Routes {
   // LoginScreen
   static final login = (_) => LoginScreen();
 
