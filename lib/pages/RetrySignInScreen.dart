@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:umbrella_client/resources/Routes.dart';
+import 'package:umbrella_client/main.dart';
 import 'package:umbrella_client/services/AuthService.dart';
 
 class RetrySignInScreen extends StatelessWidget {
@@ -16,11 +16,7 @@ class RetrySignInScreen extends StatelessWidget {
           onPressed: () async {
             var user = await auth.signInWithGoogle();
 
-            if (user != null)
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: Routes.home, maintainState: false),
-              );
+            if (user != null) redirectLoggedInUser(context, user);
           },
         ),
       ),
