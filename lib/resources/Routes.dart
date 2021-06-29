@@ -5,7 +5,7 @@ import 'package:umbrella_client/pages/DropScreen.dart';
 import 'package:umbrella_client/pages/HomeScreen.dart';
 import 'package:umbrella_client/pages/RetrySignInScreen.dart';
 import 'package:umbrella_client/pages/StandListScreen.dart';
-import 'package:umbrella_client/resources/Providers.dart';
+import 'package:umbrella_client/pages/TimerScreen.dart';
 
 abstract class Routes {
   // RetrySignInScreen
@@ -15,7 +15,10 @@ abstract class Routes {
   static final home = (_) => HomeScreen();
 
   // DropScreen
-  static final drop = (_) => Providers.standService(child: DropScreen());
+  static final drop = (_) => DropScreen();
+
+  //TimerScreen
+  static final timer = (_) => TimerScreen();
 
   // StandListScreen
   static standList(Stream<UnmodifiableListView<Stand>> stands) =>
