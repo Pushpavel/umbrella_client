@@ -19,14 +19,15 @@ void onInit(BuildContext context) async {
 
   var user = await auth.getUser().first;
 
-  if (user != null)
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: Routes.pickup, maintainState: false),
-    );
-  else
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: Routes.login, maintainState: false),
-    );
+  if (user == null) {
+    // User Not Logged In
+    user = await auth.signInWithGoogle();
+    // TODO: handle user still not logged in case
+    return;
+  }
+
+  await Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: Routes.pickup, maintainState: false),
+  );
 }
