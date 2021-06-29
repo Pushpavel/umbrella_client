@@ -6,7 +6,8 @@ import 'package:umbrella_client/resources/Providers.dart';
 import 'package:umbrella_client/resources/Routes.dart';
 import 'package:umbrella_client/services/AuthService.dart';
 
-void main() => runApp(MultiProvider(
+void main() =>
+    runApp(MultiProvider(
       providers: [Providers.authService(), Providers.standService()],
       child: MaterialApp(
         theme: appThemeData,
@@ -17,13 +18,21 @@ void main() => runApp(MultiProvider(
 void onInit(BuildContext context) async {
   var auth = Provider.of<AuthService>(context);
 
-  var user = await auth.getUser().first;
+  var user = await auth
+      .getUser()
+      .first;
 
   if (user == null) {
-    // User Not Logged In
+    // User not logged in
     user = await auth.signInWithGoogle();
-    // TODO: handle user still not logged in case
-    return;
+    if (user == null) {
+      // User still not logged in
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: Routes.retrySignIn, maintainState: false),
+      );
+      return;
+    }
   }
 
   await Navigator.pushReplacement(
