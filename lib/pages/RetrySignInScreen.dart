@@ -19,7 +19,7 @@ class RetrySignInScreen extends StatelessWidget {
             if (user != null)
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: Routes.pickup, maintainState: false),
+                MaterialPageRoute(builder: Routes.home, maintainState: false),
               );
           },
         ),

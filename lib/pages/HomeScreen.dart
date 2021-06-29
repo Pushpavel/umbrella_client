@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:umbrella_client/widgets/SelectedStandCard.dart';
 
-class PickupScreen extends StatelessWidget {
+class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +16,9 @@ class PickupScreen extends StatelessWidget {
             child: FloatingActionButton.extended(
               icon: Icon(Icons.umbrella),
               label: Text("REQUEST UMBRELLA"),
-              onPressed: () {},
+              onPressed: () {
+
+              },
             ),
           )
         ],
