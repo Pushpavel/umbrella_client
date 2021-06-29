@@ -8,9 +8,11 @@ extension QueryUtils on Query {
   ) async* {
     var onceSnap = await once();
 
-    Map<String, T> standMap = onceSnap.value.map(
-      (key, value) => MapEntry(key, modelMapper(key, value)),
-    );
+    var standMap = new Map<String, T>();
+
+    onceSnap.value.forEach((key, value) {
+      standMap[key] = modelMapper(key, value);
+    });
 
     yield UnmodifiableListView(standMap.values);
 

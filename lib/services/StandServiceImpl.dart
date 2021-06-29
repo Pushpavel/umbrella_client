@@ -15,10 +15,8 @@ class StandServiceImpl implements StandService {
     _stands = FirebaseDatabase.instance
         .reference()
         .child("stands")
-        .orderByKey()
         .onceAndOnChildChanged((k, v) => Stand.fromDynamic(k, v))
         .shareValue();
-
     _selectedStand
         .addStream(_stands.map((list) => list.first).first.asStream());
   }

@@ -21,7 +21,7 @@ void main() => runApp(MultiProvider(
     ));
 
 onInit(BuildContext context) async {
-  var auth = Provider.of<AuthService>(context);
+  var auth = Provider.of<AuthService>(context, listen: false);
 
   var user = await auth.getUser().first;
 
@@ -42,7 +42,7 @@ onInit(BuildContext context) async {
 }
 
 redirectLoggedInUser(BuildContext context, User user) async {
-  var umbrellaService = Provider.of<UmbrellaService>(context);
+  var umbrellaService = Provider.of<UmbrellaService>(context, listen: false);
 
   var request = await umbrellaService.getLastUmbrellaRequestOfUser(user).first;
 
