@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:umbrella_client/models/UmbrellaUser.dart';
 import 'package:umbrella_client/pages/SplashScreen.dart';
 import 'package:umbrella_client/resources/AppThemeData.dart';
 import 'package:umbrella_client/resources/Providers.dart';
@@ -41,10 +41,10 @@ onInit(BuildContext context) async {
   await redirectLoggedInUser(context, user);
 }
 
-redirectLoggedInUser(BuildContext context, User user) async {
+redirectLoggedInUser(BuildContext context, UmbrellaUser user) async {
   var umbrellaService = Provider.of<UmbrellaService>(context, listen: false);
 
-  var request = await umbrellaService.getLastUmbrellaRequestOfUser(user).first;
+  var request = await umbrellaService.getLastUmbrellaRequestOfUser(user.auth).first;
 
   if (request == null) {
     // user has no request

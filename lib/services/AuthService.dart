@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:umbrella_client/models/UmbrellaUser.dart';
 
 abstract class AuthService {
-  Stream<User?> getUser();
+  Stream<UmbrellaUser?> getUser();
 
-  Future<User?> signInWithGoogle();
+  Future<UmbrellaUser?> signInWithGoogle();
 }
