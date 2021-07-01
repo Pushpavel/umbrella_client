@@ -2,19 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:umbrella_client/models/UmbrellaUser.dart';
+import 'package:umbrella_client/repositories/AuthRepo.dart';
 import 'package:umbrella_client/services/AuthService.dart';
+import 'package:umbrella_client/utils/stream-utils.dart';
 
 class AuthServiceImpl implements AuthService {
-  Stream<UmbrellaUser?> getUser() {
-    return FirebaseAuth.instance.authStateChanges().asyncMap((user) async {
-      if (user == null) return null;
-      final userRef =
-          FirebaseFirestore.instance.collection("Users").doc(user.uid);
+  final _user = AuthRepo.getUser().toCachedSubject();
 
-      final userData = await userRef.get();
-      return UmbrellaUser.fromDynamic(user, userData.data()!);
-    });
-  }
+  Stream<UmbrellaUser?> getUser() => _user.stream;
 
   Future<UmbrellaUser?> signInWithGoogle() async {
     // Trigger the authentication flow
@@ -31,13 +26,10 @@ class AuthServiceImpl implements AuthService {
       idToken: googleAuth.idToken,
     );
 
-    final signedInCred =
-        await FirebaseAuth.instance.signInWithCredential(credential);
+    final signedInCred = await FirebaseAuth.instance.signInWithCredential(credential);
 
     if (signedInCred.additionalUserInfo?.isNewUser == true) {
-      final userRef = FirebaseFirestore.instance
-          .collection("Users")
-          .doc(signedInCred.user!.uid);
+      final userRef = FirebaseFirestore.instance.collection("Users").doc(signedInCred.user!.uid);
 
       await userRef.set({
         "name": signedInCred.user!.displayName,
@@ -49,4 +41,7 @@ class AuthServiceImpl implements AuthService {
       "name": signedInCred.user!.displayName!,
     });
   }
+
+  @override
+  dispose() => _user.close();
 }

@@ -4,4 +4,6 @@ abstract class AuthService {
   Stream<UmbrellaUser?> getUser();
 
   Future<UmbrellaUser?> signInWithGoogle();
+
+  dispose();
 }

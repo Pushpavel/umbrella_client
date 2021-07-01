@@ -16,6 +16,7 @@ abstract class Providers {
 
   static authService({Widget? child}) => Provider<AuthService>(
         create: (_) => AuthServiceImpl(),
+        dispose: (_, service) => service.dispose(),
         child: child,
       );
 
