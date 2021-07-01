@@ -22,6 +22,7 @@ abstract class Providers {
 
   static umbrellaService({Widget? child}) => Provider<UmbrellaService>(
         create: (_) => UmbrellaServiceImpl(),
+        dispose: (_, service) => service.dispose(),
         child: child,
       );
 }
