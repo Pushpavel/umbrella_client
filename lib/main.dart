@@ -56,6 +56,7 @@ redirectLoggedInUser(BuildContext context, UmbrellaUser user) async {
 
   var request = await umbrellaService.getUmbrellaRequest(user.requestId!).first;
 
+
   await Navigator.pushReplacement(
     context,
     MaterialPageRoute(builder: Routes.timer, maintainState: false),
