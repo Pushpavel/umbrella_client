@@ -44,9 +44,7 @@ onInit(BuildContext context) async {
 redirectLoggedInUser(BuildContext context, UmbrellaUser user) async {
   var umbrellaService = Provider.of<UmbrellaService>(context, listen: false);
 
-  var request = await umbrellaService.getLastUmbrellaRequestOfUser(user.auth).first;
-
-  if (request == null) {
+  if (user.requestId == null) {
     // user has no request
     await Navigator.pushReplacement(
       context,
@@ -55,6 +53,8 @@ redirectLoggedInUser(BuildContext context, UmbrellaUser user) async {
 
     return;
   }
+
+  var request = await umbrellaService.getUmbrellaRequest(user.requestId!).first;
 
   await Navigator.pushReplacement(
     context,

@@ -8,21 +8,21 @@ class UmbrellaRequest {
 
   final String pickupStandId;
   final Timestamp? dropTime;
-  final String dropStandId;
+  final String? dropStandId;
   final Timestamp? pickupTime;
 
   UmbrellaRequest({
     this.dropTime,
     this.pickupTime,
+    this.dropStandId,
     required this.pickupStandId,
-    required this.dropStandId,
     required this.id,
     required this.userId,
     required this.requestTime,
     this.umbrellaId,
   });
 
-  factory UmbrellaRequest.fromFirestore(QueryDocumentSnapshot snapshot) {
+  factory UmbrellaRequest.fromFirestore(DocumentSnapshot snapshot) {
     return UmbrellaRequest(
       dropTime: snapshot.get("drop.time"),
       pickupTime: snapshot.get("pickup.time"),
