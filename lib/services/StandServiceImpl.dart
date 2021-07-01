@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:collection';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:umbrella_client/models/Stand.dart';
 import 'package:umbrella_client/services/StandService.dart';
-import 'package:umbrella_client/utils/firebase-utils.dart';
 
 class StandServiceImpl implements StandService {
   late final Stream<UnmodifiableListView<Stand>> _stands;
@@ -12,11 +11,13 @@ class StandServiceImpl implements StandService {
   final _selectedStand = BehaviorSubject<Stand>();
 
   StandServiceImpl() {
-    _stands = FirebaseDatabase.instance
-        .reference()
-        .child("stands")
-        .onceAndOnChildChanged((k, v) => Stand.fromDynamic(k, v))
-        .shareValue();
+    _stands = FirebaseFirestore.instance.collection("Stands").snapshots().map(
+      (querySnap) {
+        final list = querySnap.docs.map((snap) => Stand.fromFirestore(snap));
+        return UnmodifiableListView(list);
+      },
+    ).shareValue();
+
     _selectedStand
         .addStream(_stands.map((list) => list.first).first.asStream());
   }
