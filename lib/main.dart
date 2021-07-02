@@ -8,17 +8,15 @@ import 'package:umbrella_client/resources/Routes.dart';
 import 'package:umbrella_client/services/AuthService.dart';
 import 'package:umbrella_client/services/UmbrellaService.dart';
 
-void main() => runApp(MultiProvider(
-      providers: [
-        Providers.authService(),
-        Providers.standService(),
-        Providers.umbrellaService()
-      ],
-      child: MaterialApp(
-        theme: appThemeData,
-        home: SplashScreen(onInit),
+void main() => runApp(
+      MultiProvider(
+        providers: [Providers.authService(), Providers.standService(), Providers.umbrellaService()],
+        child: MaterialApp(
+          theme: appThemeData,
+          home: SplashScreen(onInit),
+        ),
       ),
-    ));
+    );
 
 onInit(BuildContext context) async {
   var auth = Provider.of<AuthService>(context, listen: false);
@@ -56,9 +54,8 @@ redirectLoggedInUser(BuildContext context, UmbrellaUser user) async {
 
   var request = await umbrellaService.getUmbrellaRequest(user.requestId!).first;
 
-
   await Navigator.pushReplacement(
     context,
-    MaterialPageRoute(builder: Routes.timer, maintainState: false),
+    MaterialPageRoute(builder: Routes.pickup(Future.value(true)), maintainState: false),
   );
 }

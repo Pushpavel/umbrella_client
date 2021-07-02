@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-class _MyStatefulWidgetState extends State<TimerScreen> {
+class PickupScreen extends StatefulWidget {
+  final Future<bool> isRequested;
+
+  const PickupScreen({required this.isRequested});
+
+  @override
+  State<PickupScreen> createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<PickupScreen> {
   final Stream<int> _bids = (() async* {
-    for(var time = 15; time>=0; time--){
-    await Future<void>.delayed(const Duration(seconds: 1));
-    yield time;
+    for (var time = 15; time >= 0; time--) {
+      await Future<void>.delayed(const Duration(seconds: 1));
+      yield time;
     }
     await Future<void>.delayed(const Duration(seconds: 1));
   })();
@@ -105,11 +114,4 @@ class _MyStatefulWidgetState extends State<TimerScreen> {
       ),
     );
   }
-}
-
-class TimerScreen extends StatefulWidget {
-  const TimerScreen({Key? key}) : super(key: key);
-
-  @override
-  State<TimerScreen> createState() => _MyStatefulWidgetState();
 }
