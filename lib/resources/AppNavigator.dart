@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:umbrella_client/models/AppState.dart';
+import 'package:umbrella_client/pages/HomeScreen.dart';
 import 'package:umbrella_client/pages/RetrySignInScreen.dart';
 import 'package:umbrella_client/pages/SplashScreen.dart';
 
@@ -14,8 +15,10 @@ class AppNavigator extends StatelessWidget {
       pages: [
         if (state == null)
           MaterialPage(child: LoadingScreen())
-        else
+        else if (state.user == null)
           MaterialPage(child: RetrySignInScreen())
+        else
+          MaterialPage(child: HomeScreen())
       ],
       onPopPage: (route, result) => route.didPop(result),
     );
