@@ -1,25 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:umbrella_client/models/AppState.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:umbrella_client/pages/HomeScreen.dart';
 import 'package:umbrella_client/pages/RetrySignInScreen.dart';
 import 'package:umbrella_client/pages/SplashScreen.dart';
+import 'package:umbrella_client/services/AppStateProvider.dart';
 
-class AppNavigator extends StatelessWidget {
+class AppNavigator extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    final state = Provider.of<AppState?>(context);
+  Widget build(BuildContext context, watch) {
+    final state = watch(appStateProvider);
 
     return Navigator(
-      pages: [
-        if (state == null)
-          MaterialPage(child: LoadingScreen())
-        else if (state.user == null)
-          MaterialPage(child: RetrySignInScreen())
-        else
-          MaterialPage(child: HomeScreen())
-      ],
+      pages: state.maybeWhen(
+        data: (state) => [
+          if (state.user == null)
+            MaterialPage(child: RetrySignInScreen())
+          else
+            MaterialPage(child: HomeScreen())
+        ],
+        orElse: () => [MaterialPage(child: LoadingScreen())],
+      ),
       onPopPage: (route, result) => route.didPop(result),
     );
   }
