@@ -1,11 +1,25 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:umbrella_client/models/AppState.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:umbrella_client/repositories/AuthRepo.dart';
 import 'package:umbrella_client/repositories/UmbrellaRepo.dart';
 import 'package:umbrella_client/utils/stream-utils.dart';
 
-Stream<AppState> createAppStateStream(_) async* {
+class AppService {
+  const AppService._();
+
+  static provider({Widget? child}) {
+    return StreamProvider<AppState?>(
+      create: _createAppStateStream,
+      initialData: null,
+      child: child,
+    );
+  }
+}
+
+Stream<AppState> _createAppStateStream(_) async* {
   // initialize Firebase
   await Firebase.initializeApp();
 
