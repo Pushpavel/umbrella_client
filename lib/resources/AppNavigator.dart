@@ -8,8 +8,8 @@ import 'package:umbrella_client/services/AppStateProvider.dart';
 
 class AppNavigator extends ConsumerWidget {
   @override
-  Widget build(BuildContext context, ref) {
-    final state = ref.watch(appStateProvider);
+  Widget build(BuildContext context, watch) {
+    final state = watch(appStateProvider);
 
     return Navigator(
       pages: state.maybeWhen(
