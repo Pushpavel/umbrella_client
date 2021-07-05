@@ -4,23 +4,20 @@ import 'package:umbrella_client/models/Stand.dart';
 import 'package:umbrella_client/repositories/StandRepo.dart';
 import 'package:umbrella_client/services/StandService.dart';
 import 'package:umbrella_client/utils/stream-utils.dart';
+import 'package:umbrella_client/utils/iterable-utils.dart';
 
 class StandServiceImpl implements StandService {
   final _stands = StandRepo.getStands().toCachedSubject();
-  late final _selectedStand;
-
-  StandServiceImpl() {
-    _selectedStand = _stands.map((list) => list.first).first.asStream().toCachedSubject();
-  }
-
-  Stream<Stand> getSelectedStand() => _selectedStand;
 
   Stream<UnmodifiableListView<Stand>> getStands() => _stands;
 
-  selectStand(Stand stand) => _selectedStand.add(stand);
+  @override
+  Stream<Stand?> getStand(String standId) {
+    return _stands.map((stands) => stands.findOrNull((stand) => stand.id == standId));
+  }
 
   dispose() {
-    _selectedStand.close();
     _stands.close();
   }
+
 }

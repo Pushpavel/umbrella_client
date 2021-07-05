@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:umbrella_client/resources/Routes.dart';
-import 'package:umbrella_client/services/StandService.dart';
-import 'package:umbrella_client/services/UmbrellaService.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:umbrella_client/widgets/SelectedStandCard.dart';
 
-class HomeScreen extends StatelessWidget {
-  Future<bool> onPickupRequest(context) async {
-    final standService = Provider.of<StandService>(context);
-    final umbrellaService = Provider.of<UmbrellaService>(context);
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
 
-    final selectedStand = await standService.getSelectedStand().first;
-    return umbrellaService.requestUmbrellaPickup(selectedStand);
-  }
+class _HomeScreenState extends State<HomeScreen> {
+  final selectedStandId$ = BehaviorSubject<String>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +18,9 @@ class HomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SelectedStandCard(),
+          SelectedStandCard(
+            selectedStandId$: selectedStandId$,
+          ),
           Container(
             padding: EdgeInsets.all(32),
             alignment: Alignment.bottomCenter,
@@ -29,17 +28,17 @@ class HomeScreen extends StatelessWidget {
               icon: Icon(Icons.umbrella),
               label: Text("REQUEST UMBRELLA"),
               onPressed: () {
-                final isRequested = onPickupRequest(context);
-
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: Routes.pickup(isRequested)),
-                );
               },
             ),
           )
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    selectedStandId$.close();
+    super.dispose();
   }
 }
