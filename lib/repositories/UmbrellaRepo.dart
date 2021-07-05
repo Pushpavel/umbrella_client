@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:umbrella_client/models/UmbrellaRequest.dart';
 
 class UmbrellaRepo {
@@ -11,6 +12,12 @@ class UmbrellaRepo {
         return UmbrellaRequest.fromFirestore(snap);
       },
     );
+  }
+
+  static Future<bool> requestUmbrellaPickup(String standId) async {
+    final request = FirebaseFunctions.instance.httpsCallable("requestUmbrellaPickup");
+    final result = await request({"standId": standId});
+    return result.data["success"] != null;
   }
 
   UmbrellaRepo._();
