@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:umbrella_client/models/Stand.dart';
+import 'package:umbrella_client/pages/StandListScreen.dart';
 import 'package:umbrella_client/services/StandService.dart';
 import 'package:umbrella_client/widgets/ClickableCard.dart';
 
@@ -30,11 +31,10 @@ class SelectedStandCard extends StatelessWidget {
         ],
       ),
       onClick: () async {
-        // var selectedStand = await Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: Routes.standList(standService.getStands())),
-        // );
-        // if (selectedStand != null) standService.selectStand(selectedStand);
+        var selectedStandId = await StandListScreen.push(context);
+        if (selectedStandId != null) {
+          selectedStandId$.add(selectedStandId);
+        }
       },
     );
   }

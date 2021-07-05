@@ -6,8 +6,7 @@ import 'package:umbrella_client/services/StandService.dart';
 class HomeScreenViewModel {
   final selectedStandId$ = BehaviorSubject<String>();
 
-  HomeScreenViewModel(BuildContext context) {
-    final standService = Provider.of<StandService>(context, listen: false);
+  HomeScreenViewModel(StandService standService) {
     // initializing selectedStandId
     selectedStandId$.addStream(
       standService
@@ -25,7 +24,10 @@ class HomeScreenViewModel {
 
   static provider({Widget? child}) {
     return Provider<HomeScreenViewModel>(
-      create: (context) => HomeScreenViewModel(context),
+      create: (context) {
+        final standService = Provider.of<StandService>(context, listen: false);
+        return HomeScreenViewModel(standService);
+      },
       dispose: (_, viewModel) => viewModel.dispose(),
       child: child,
     );

@@ -21,5 +21,5 @@ abstract class Routes {
   static pickup(Future<bool> isRequested) => (_) => PickupScreen(isRequested: isRequested);
 
   // StandListScreen
-  static standList(Stream<UnmodifiableListView<Stand>> stands) => (_) => StandListScreen(stands);
+  static standList(Stream<UnmodifiableListView<Stand>> stands) => (_) => StandListScreen();
 }

@@ -13,7 +13,12 @@ class HomeScreen extends StatelessWidget {
         StandService.provider(),
         HomeScreenViewModel.provider(),
       ],
-      child: _HomeScreenView(),
+      child: Navigator(
+        pages: [
+          MaterialPage(child: _HomeScreenView()),
+        ],
+        onPopPage: (route, result) => route.didPop(result),
+      ),
     );
   }
 }
