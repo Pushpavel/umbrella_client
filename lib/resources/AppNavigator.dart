@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:umbrella_client/pages/HomeScreen.dart';
@@ -23,9 +22,8 @@ class _AppNavigatorState extends State<AppNavigator> {
   _AppNavigatorState({required this.authService});
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    await Firebase.initializeApp();
 
     authService.user.switchMap((user) async* {
       // unauthenticated user
