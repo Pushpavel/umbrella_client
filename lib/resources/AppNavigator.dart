@@ -7,7 +7,7 @@ import 'package:umbrella_client/pages/DropScreen.dart';
 import 'package:umbrella_client/pages/HomeScreen.dart';
 import 'package:umbrella_client/pages/LoginScreen.dart';
 import 'package:umbrella_client/pages/PickupScreen.dart';
-import 'package:umbrella_client/pages/SplashScreen.dart';
+import 'package:umbrella_client/pages/LoadingScreen.dart';
 import 'package:umbrella_client/repositories/UmbrellaRepo.dart';
 import 'package:umbrella_client/services/AuthService.dart';
 import 'package:umbrella_client/utils/nav-utils.dart';
