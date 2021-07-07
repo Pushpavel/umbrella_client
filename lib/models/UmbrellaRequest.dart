@@ -28,9 +28,8 @@ class UmbrellaRequest {
     final data = snapshot.data();
     if (data == null) throw Exception("Internal Error");
 
-    final failure = data.containsKey("failure")
-        ? _Failure(data["failure.reason"], data["failure.time"])
-        : null;
+    final failure =
+        data.containsKey("failure") ? _Failure(data["failure.reason"], data["failure.time"]) : null;
 
     return UmbrellaRequest(
         dropTime: data["drop.time"],
@@ -44,7 +43,7 @@ class UmbrellaRequest {
         failure: failure);
   }
 
-  get status {
+  UmbrellaRequestStatus get status {
     if (failure != null) return UmbrellaRequestStatus.FAILED;
     if (dropTime != null) return UmbrellaRequestStatus.DROPPED;
     if (pickupTime != null) return UmbrellaRequestStatus.PICKED_UP;

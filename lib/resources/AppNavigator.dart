@@ -47,11 +47,13 @@ class _AppNavigatorState extends State<AppNavigator> {
 
       final requestStream = UmbrellaRepo.getUmbrellaRequest(user.requestId!);
 
-      yield* requestStream.switchMap((request) async* {
-        if (request == null) throw Exception("Internal Error");
+      yield* requestStream.map((request) => request?.status).distinct().switchMap((status) async* {
+        if (status == null) throw Exception("Internal Error");
 
-        if (request.status == UmbrellaRequestStatus.REQUESTED)
-          await context.resetNavStackWith(PickupScreen());
+        if (status == UmbrellaRequestStatus.REQUESTED)
+          await context.resetNavStackWith(PickupScreen(
+            requestStream: requestStream.map((event) => event!),
+          ));
         else
           await context.resetNavStackWith(DropScreen());
       });

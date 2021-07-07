@@ -1,17 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:umbrella_client/models/UmbrellaPickupState.dart';
 import 'package:umbrella_client/models/UmbrellaRequest.dart';
+import 'package:rxdart/rxdart.dart';
 
 class UmbrellaRepo {
   static Stream<UmbrellaRequest?> getUmbrellaRequest(String requestId) {
-    var query = FirebaseFirestore.instance.collection("Requests").doc(requestId);
+    final query = FirebaseFirestore.instance.collection("Requests").doc(requestId);
 
     return query.snapshots().map(
       (snap) {
         if (!snap.exists) return null;
         return UmbrellaRequest.fromFirestore(snap);
       },
-    );
+    ).shareValue();
+  }
+
+  static Stream<UmbrellaPickupState?> getUmbrellaPickupState(String standId) {
+    final query = FirebaseDatabase.instance
+        .reference()
+        .child("activeStandRequests")
+        .child(standId)
+        .child("request");
+
+    return query.onValue.map((event) => UmbrellaPickupState.fromRTDB(standId, event.snapshot));
   }
 
   static Future<bool> requestUmbrellaPickup(String standId) async {
