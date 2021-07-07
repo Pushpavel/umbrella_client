@@ -1,9 +1,13 @@
 import 'package:umbrella_client/models/UmbrellaUser.dart';
+import 'package:umbrella_client/repositories/AuthRepo.dart';
+import 'package:umbrella_client/utils/stream-utils.dart';
 
-abstract class AuthService {
-  Stream<UmbrellaUser?> getUser();
+class AuthService {
+  final _user = AuthRepo.getUser().toCachedSubject();
 
-  Future<UmbrellaUser?> signInWithGoogle();
+  late final Stream<UmbrellaUser?> user = _user.stream;
 
-  dispose();
+  dispose() {
+    _user.close();
+  }
 }
