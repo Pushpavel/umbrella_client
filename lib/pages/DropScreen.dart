@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:umbrella_client/widgets/OwnedUmbrellaCard.dart';
-import 'package:umbrella_client/widgets/SelectedStandCard.dart';
 
 class DropScreen extends StatelessWidget {
   @override
@@ -11,7 +10,7 @@ class DropScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           OwnedUmbrellaCard(),
-          SelectedStandCard(),
+          // SelectedStandCard(),
         ],
       ),
     );
