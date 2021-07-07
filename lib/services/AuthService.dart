@@ -9,7 +9,8 @@ class AuthService {
 
   late final Stream<UmbrellaUser?> user = _user.stream;
 
-  dispose() {
+  dispose() async {
+    await _user.drain();
     _user.close();
   }
 
