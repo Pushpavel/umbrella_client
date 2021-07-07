@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 class PickupScreen extends StatefulWidget {
-  final Future<bool> isRequested;
 
-  const PickupScreen({required this.isRequested});
+  const PickupScreen();
 
   @override
   State<PickupScreen> createState() => _MyStatefulWidgetState();
