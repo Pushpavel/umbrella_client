@@ -24,24 +24,26 @@ class UmbrellaRequest {
       this.umbrellaId,
       this.failure});
 
-  factory UmbrellaRequest.fromFirestore(DocumentSnapshot snapshot) {
-    final failure = snapshot.get("failure") != null
-        ? _Failure(snapshot.get("failure.reason"), snapshot.get("failure.time"))
-        : null;
+  factory UmbrellaRequest.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    final data = snapshot.data();
+    if (data == null) throw Exception("Internal Error");
+
+    final failure =
+        data.containsKey("failure") ? _Failure(data["failure.reason"], data["failure.time"]) : null;
 
     return UmbrellaRequest(
-        dropTime: snapshot.get("drop.time"),
-        pickupTime: snapshot.get("pickup.time"),
-        pickupStandId: snapshot.get("pickup.stand"),
-        dropStandId: snapshot.get("drop.stand"),
+        dropTime: data["drop.time"],
+        pickupTime: data["pickup.time"],
+        pickupStandId: data["pickup.stand"],
+        dropStandId: data["drop.stand"],
         id: snapshot.id,
-        userId: snapshot.get("userId"),
-        requestTime: snapshot.get("requestTime"),
-        umbrellaId: snapshot.get("umbrellaId"),
+        userId: data["userId"],
+        requestTime: data["requestTime"],
+        umbrellaId: data["umbrellaId"],
         failure: failure);
   }
 
-  get status {
+  UmbrellaRequestStatus get status {
     if (failure != null) return UmbrellaRequestStatus.FAILED;
     if (dropTime != null) return UmbrellaRequestStatus.DROPPED;
     if (pickupTime != null) return UmbrellaRequestStatus.PICKED_UP;

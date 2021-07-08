@@ -10,7 +10,8 @@ class Stand {
     return Stand(data["name"], key);
   }
 
-  factory Stand.fromFirestore(DocumentSnapshot snap) {
-    return Stand(snap.get("name"), snap.id);
+  factory Stand.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snap) {
+    final data  = snap.data();
+    return Stand(data?["name"], snap.id);
   }
 }

@@ -1,64 +1,27 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:umbrella_client/models/UmbrellaUser.dart';
-import 'package:umbrella_client/pages/SplashScreen.dart';
+import 'package:umbrella_client/resources/AppNavigator.dart';
 import 'package:umbrella_client/resources/AppThemeData.dart';
-import 'package:umbrella_client/resources/Providers.dart';
-import 'package:umbrella_client/resources/Routes.dart';
 import 'package:umbrella_client/services/AuthService.dart';
-import 'package:umbrella_client/services/UmbrellaService.dart';
 
-void main() => runApp(MultiProvider(
-      providers: [
-        Providers.authService(),
-        Providers.standService(),
-        Providers.umbrellaService()
-      ],
-      child: MaterialApp(
-        theme: appThemeData,
-        home: SplashScreen(onInit),
-      ),
-    ));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-onInit(BuildContext context) async {
-  var auth = Provider.of<AuthService>(context, listen: false);
+  await Firebase.initializeApp();
 
-  var user = await auth.getUser().first;
-
-  if (user == null) {
-    // User not logged in
-    user = await auth.signInWithGoogle();
-    if (user == null) {
-      // User still not logged in
-      await Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: Routes.retrySignIn, maintainState: false),
-      );
-      return;
-    }
-  }
-
-  await redirectLoggedInUser(context, user);
+  runApp(
+    MaterialApp(
+      theme: appThemeData,
+      home: AuthService.provider(child: _App()),
+    ),
+  );
 }
 
-redirectLoggedInUser(BuildContext context, UmbrellaUser user) async {
-  var umbrellaService = Provider.of<UmbrellaService>(context, listen: false);
-
-  if (user.requestId == null) {
-    // user has no request
-    await Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: Routes.home, maintainState: false),
-    );
-
-    return;
+class _App extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+    return AppNavigator(authService: authService);
   }
-
-  var request = await umbrellaService.getUmbrellaRequest(user.requestId!).first;
-
-
-  await Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(builder: Routes.timer, maintainState: false),
-  );
 }
