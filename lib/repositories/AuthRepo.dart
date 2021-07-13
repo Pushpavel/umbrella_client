@@ -2,28 +2,34 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:umbrella_client/models/UmbrellaUser.dart';
+import 'package:rxdart/rxdart.dart';
 
 class AuthRepo {
   static Stream<UmbrellaUser?> getUser() {
-    return FirebaseAuth.instance.authStateChanges().asyncMap((user) async {
-      if (user == null) return null;
+    return FirebaseAuth.instance.authStateChanges().switchMap((user) async* {
+      if (user == null) {
+        yield null;
+        return;
+      }
+
       final userRef = FirebaseFirestore.instance.collection("Users").doc(user.uid);
 
-      final userData = await userRef.get();
-      return UmbrellaUser.fromDynamic(user, userData.data()!);
+      yield* userRef
+          .snapshots()
+          .map((userData) => UmbrellaUser.fromDynamic(user, userData.data()!));
     });
   }
 
   static Future<UmbrellaUser?> signInWithGoogle() async {
-    // Trigger the authentication flow
+// Trigger the authentication flow
     final googleUser = await GoogleSignIn().signIn();
 
     if (googleUser == null) return null;
 
-    // Obtain the auth details from the request
+// Obtain the auth details from the request
     final googleAuth = await googleUser.authentication;
 
-    // Create a new credential
+// Create a new credential
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
@@ -39,7 +45,7 @@ class AuthRepo {
       });
     }
 
-    // Once signed in, return the UserCredential
+// Once signed in, return the UserCredential
     return UmbrellaUser.fromDynamic(signedInCred.user!, {
       "name": signedInCred.user!.displayName!,
     });
