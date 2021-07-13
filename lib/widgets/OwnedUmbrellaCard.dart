@@ -4,6 +4,9 @@ import 'package:umbrella_client/resources/Strings.dart';
 import 'package:umbrella_client/widgets/ClickableCard.dart';
 
 class OwnedUmbrellaCard extends StatelessWidget {
+  final String umbrellaId;
+  OwnedUmbrellaCard({required this.umbrellaId});
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
@@ -23,8 +26,10 @@ class OwnedUmbrellaCard extends StatelessWidget {
             child: Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                Text("AZ186444", style: theme.textTheme.subtitle1),
-                IconButton(icon: Icon(Icons.copy), onPressed: () {})
+                Text(umbrellaId, style: theme.textTheme.subtitle1),
+                IconButton(
+                    icon: Icon(Icons.copy),
+                    onPressed: () {}) //what is the use copying this ???
               ],
             ),
           ),
