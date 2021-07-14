@@ -9,6 +9,7 @@ import 'package:umbrella_client/helpers/simpleNavigator.dart';
 import 'package:umbrella_client/pages/HomeScreen.dart';
 import 'package:umbrella_client/pages/LoadingScreen.dart';
 import 'package:umbrella_client/pages/LoginScreen.dart';
+import 'package:umbrella_client/pages/PickupScreen.dart';
 
 class NavDelegate extends SinglePageRouterDelegate {
   @override
@@ -33,9 +34,7 @@ class NavDelegate extends SinglePageRouterDelegate {
             // user with request
             switch (request.status) {
               case UmbrellaRequestStatus.REQUESTED:
-                // TODO: use this after refactoring PickupScreen to use Provider for currentRequest
-                // PickupScreen(requestStream: requestStream.map((event) => event!),);
-                return LoadingScreen();
+                return PickupScreen();
               case UmbrellaRequestStatus.PICKED_UP:
                 // TODO: use this after refactoring DropScreen to use Provider for currentRequest
                 // DropScreen(requestStream: requestStream.map((event) => event!),);

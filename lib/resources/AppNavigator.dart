@@ -57,9 +57,7 @@ class _AppNavigatorState extends State<AppNavigator> {
 
         switch (status) {
           case UmbrellaRequestStatus.REQUESTED:
-            await context.resetNavStackWith(PickupScreen(
-              requestStream: requestStream.map((event) => event!),
-            ));
+            await context.resetNavStackWith(PickupScreen());
             break;
           case UmbrellaRequestStatus.PICKED_UP:
             await context.resetNavStackWith(DropScreen(

@@ -9,7 +9,11 @@ class ResultStreamProvider<T> extends StreamProvider<Result<T>?> {
   }) : super(
           create: (context) => create(context)?.map((event) => Result(event)),
           initialData: null,
-          catchError: (context, error) => Result.error(error as Exception),
+          catchError: (context, error) {
+            if (error is Exception) return Result.error(error);
+
+            return Result.error(Exception(error));
+          },
           child: child,
         );
 }
