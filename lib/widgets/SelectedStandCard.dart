@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:umbrella_client/data/models/Stand.dart';
+import 'package:umbrella_client/helpers/extensions/ContextExtensions.dart';
 import 'package:umbrella_client/pages/StandListScreen.dart';
 import 'package:umbrella_client/data/services/StandService.dart';
 import 'package:umbrella_client/widgets/ClickableCard.dart';
@@ -15,7 +15,7 @@ class SelectedStandCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var standService = Provider.of<StandService>(context);
+    var standService = context.get<StandService>();
 
     return ClickableCard(
       child: Row(
