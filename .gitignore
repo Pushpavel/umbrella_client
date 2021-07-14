@@ -1,3 +1,10 @@
+# Generated Files
+*.g.dart
+*.freezed.dart
+
+# local scripts
+/.scripts/
+
 # Miscellaneous
 *.class
 *.log
