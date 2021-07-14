@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:umbrella_client/resources/AppNavigator.dart';
 import 'package:umbrella_client/resources/AppThemeData.dart';
-import 'package:umbrella_client/services/AuthService.dart';
+import 'package:umbrella_client/data/services/AuthService.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

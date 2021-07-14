@@ -3,8 +3,8 @@ import 'dart:collection';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:umbrella_client/models/Stand.dart';
-import 'package:umbrella_client/services/StandService.dart';
+import 'package:umbrella_client/data/models/Stand.dart';
+import 'package:umbrella_client/data/services/StandService.dart';
 import 'package:umbrella_client/widgets/ClickableCard.dart';
 import 'package:umbrella_client/widgets/StandContent.dart';
 

@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:umbrella_client/models/UmbrellaRequest.dart';
+import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:umbrella_client/repositories/UmbrellaRepo.dart';
+import 'package:umbrella_client/data/repositories/UmbrellaRepo.dart';
 
 class PickupScreen extends StatelessWidget {
   final Stream<UmbrellaRequest> requestStream;

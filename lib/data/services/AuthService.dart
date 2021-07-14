@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-import 'package:umbrella_client/models/UmbrellaUser.dart';
-import 'package:umbrella_client/repositories/AuthRepo.dart';
+import 'package:umbrella_client/data/models/UmbrellaUser.dart';
+import 'package:umbrella_client/data/repositories/AuthRepo.dart';
 import 'package:umbrella_client/utils/stream-utils.dart';
 
 class AuthService {

@@ -2,8 +2,8 @@ import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-import 'package:umbrella_client/models/Stand.dart';
-import 'package:umbrella_client/repositories/StandRepo.dart';
+import 'package:umbrella_client/data/models/Stand.dart';
+import 'package:umbrella_client/data/repositories/StandRepo.dart';
 import 'package:umbrella_client/utils/stream-utils.dart';
 import 'package:umbrella_client/utils/iterable-utils.dart';
 

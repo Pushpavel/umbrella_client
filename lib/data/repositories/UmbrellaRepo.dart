@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:umbrella_client/models/UmbrellaPickupState.dart';
-import 'package:umbrella_client/models/UmbrellaRequest.dart';
+import 'package:umbrella_client/data/models/UmbrellaPickupState.dart';
+import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
 import 'package:rxdart/rxdart.dart';
 
 class UmbrellaRepo {

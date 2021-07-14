@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:umbrella_client/models/UmbrellaRequest.dart';
+import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
 import 'package:umbrella_client/widgets/OwnedUmbrellaCard.dart';
 
 class DropScreen extends StatelessWidget {

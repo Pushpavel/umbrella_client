@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:umbrella_client/models/UmbrellaRequest.dart';
+import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
 import 'package:umbrella_client/pages/DropScreen.dart';
 import 'package:umbrella_client/pages/HomeScreen.dart';
 import 'package:umbrella_client/pages/LoginScreen.dart';
 import 'package:umbrella_client/pages/PickupScreen.dart';
 import 'package:umbrella_client/pages/LoadingScreen.dart';
-import 'package:umbrella_client/repositories/UmbrellaRepo.dart';
-import 'package:umbrella_client/services/AuthService.dart';
+import 'package:umbrella_client/data/repositories/UmbrellaRepo.dart';
+import 'package:umbrella_client/data/services/AuthService.dart';
 import 'package:umbrella_client/utils/nav-utils.dart';
 import 'package:rxdart/rxdart.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:umbrella_client/repositories/UmbrellaRepo.dart';
-import 'package:umbrella_client/services/HomeScreenViewModel.dart';
-import 'package:umbrella_client/services/StandService.dart';
+import 'package:umbrella_client/data/repositories/UmbrellaRepo.dart';
+import 'package:umbrella_client/data/services/HomeScreenViewModel.dart';
+import 'package:umbrella_client/data/services/StandService.dart';
 import 'package:umbrella_client/widgets/SelectedStandCard.dart';
 
 class HomeScreen extends StatelessWidget {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:umbrella_client/models/Stand.dart';
+import 'package:umbrella_client/data/models/Stand.dart';
 import 'package:umbrella_client/pages/StandListScreen.dart';
-import 'package:umbrella_client/services/StandService.dart';
+import 'package:umbrella_client/data/services/StandService.dart';
 import 'package:umbrella_client/widgets/ClickableCard.dart';
 
 import 'StandContent.dart';
