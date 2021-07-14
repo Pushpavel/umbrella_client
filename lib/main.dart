@@ -1,10 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:umbrella_client/data/services/AuthService.dart';
 import 'package:umbrella_client/helpers/DisposableProvider.dart';
-import 'package:umbrella_client/helpers/extensions/ContextExtensions.dart';
 import 'package:umbrella_client/resources/AppNavigator.dart';
 import 'package:umbrella_client/resources/AppThemeData.dart';
-import 'package:umbrella_client/data/services/AuthService.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,20 +12,18 @@ void main() async {
   await Firebase.initializeApp();
 
   runApp(
-    MaterialApp(
-      theme: appThemeData,
-      home: DisposableProvider<AuthService>(
-        create: (_) => AuthService(),
-        child: _App(),
+    MultiProvider(
+      providers: [
+        // TODO: use this provider after migrating to different navigation
+        // ResultStreamProvider<UmbrellaUser?>(create: (_) => AuthRepo.getUser()),
+        DisposableProvider(create: (_) => AuthService()),
+      ],
+      child: MaterialApp(
+        theme: appThemeData,
+        home: Consumer<AuthService>(
+          builder: (context, value, _) => AppNavigator(authService: value),
+        ),
       ),
     ),
   );
-}
-
-class _App extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final authService = context.get<AuthService>();
-    return AppNavigator(authService: authService);
-  }
 }
