@@ -2,11 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:umbrella_client/data/services/StandService.dart';
+import 'package:umbrella_client/helpers/DisposableProvider.dart';
 
-class HomeScreenViewModel {
+class HomeScreenViewModel implements Disposable {
   final selectedStandId$ = BehaviorSubject<String>();
 
-  HomeScreenViewModel(StandService standService) {
+  HomeScreenViewModel(BuildContext context) {
+    final standService = Provider.of<StandService>(context, listen: false);
+
     // initializing selectedStandId
     selectedStandId$.addStream(
       standService
@@ -20,16 +23,5 @@ class HomeScreenViewModel {
 
   dispose() {
     selectedStandId$.close();
-  }
-
-  static provider({Widget? child}) {
-    return Provider<HomeScreenViewModel>(
-      create: (context) {
-        final standService = Provider.of<StandService>(context, listen: false);
-        return HomeScreenViewModel(standService);
-      },
-      dispose: (_, viewModel) => viewModel.dispose(),
-      child: child,
-    );
   }
 }

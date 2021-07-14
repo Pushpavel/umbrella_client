@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:umbrella_client/helpers/DisposableProvider.dart';
 import 'package:umbrella_client/resources/AppNavigator.dart';
 import 'package:umbrella_client/resources/AppThemeData.dart';
 import 'package:umbrella_client/data/services/AuthService.dart';
@@ -13,7 +14,10 @@ void main() async {
   runApp(
     MaterialApp(
       theme: appThemeData,
-      home: AuthService.provider(child: _App()),
+      home: DisposableProvider<AuthService>(
+        create: (_) => AuthService(),
+        child: _App(),
+      ),
     ),
   );
 }

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:umbrella_client/data/repositories/UmbrellaRepo.dart';
 import 'package:umbrella_client/data/services/HomeScreenViewModel.dart';
 import 'package:umbrella_client/data/services/StandService.dart';
+import 'package:umbrella_client/helpers/DisposableProvider.dart';
 import 'package:umbrella_client/widgets/SelectedStandCard.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -10,8 +11,8 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        StandService.provider(),
-        HomeScreenViewModel.provider(),
+        DisposableProvider(create: (_) => StandService()),
+        DisposableProvider(create: (context) => HomeScreenViewModel(context))
       ],
       child: _HomeScreenView(),
     );

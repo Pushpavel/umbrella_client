@@ -1,24 +1,14 @@
-import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:umbrella_client/data/models/UmbrellaUser.dart';
 import 'package:umbrella_client/data/repositories/AuthRepo.dart';
+import 'package:umbrella_client/helpers/DisposableProvider.dart';
 import 'package:umbrella_client/utils/stream-utils.dart';
 
-class AuthService {
-  final _user = AuthRepo.getUser().toCachedSubject();
-
-  late final Stream<UmbrellaUser?> user = _user.stream;
+class AuthService implements Disposable {
+  final Stream<UmbrellaUser?> user = AuthRepo.getUser().toCachedSubject();
 
   dispose() async {
-    await _user.drain();
-    _user.close();
-  }
-
-  static provider({Widget? child}) {
-    return Provider<AuthService>(
-      create: (_) => AuthService(),
-      dispose: (_, service) => service.dispose(),
-      child: child,
-    );
+    await user.drain();
+    (user as BehaviorSubject<UmbrellaUser?>).close();
   }
 }
