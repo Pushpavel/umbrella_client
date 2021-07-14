@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:umbrella_client/models/Stand.dart';
+import 'package:umbrella_client/data/models/Stand.dart';
 
 class StandContent extends StatelessWidget {
   final Stand stand;

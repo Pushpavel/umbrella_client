@@ -3,8 +3,9 @@ import 'dart:collection';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:umbrella_client/models/Stand.dart';
-import 'package:umbrella_client/services/StandService.dart';
+import 'package:umbrella_client/data/models/Stand.dart';
+import 'package:umbrella_client/data/services/StandService.dart';
+import 'package:umbrella_client/helpers/extensions/ContextExtensions.dart';
 import 'package:umbrella_client/widgets/ClickableCard.dart';
 import 'package:umbrella_client/widgets/StandContent.dart';
 
@@ -13,7 +14,7 @@ class StandListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final standService = Provider.of<StandService>(context);
+    final standService = context.get<StandService>();
     return Scaffold(
       body: StreamBuilder<UnmodifiableListView<Stand>>(
         stream: standService.getStands(),
@@ -33,7 +34,7 @@ class StandListScreen extends StatelessWidget {
   }
 
   static Future<String?> push(BuildContext context) {
-    final standService = Provider.of<StandService>(context,listen: false);
+    final standService = context.get<StandService>(false);
 
     return Navigator.of(context).push(
       MaterialPageRoute(

@@ -1,13 +1,12 @@
 import 'dart:collection';
 
-import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
-import 'package:umbrella_client/models/Stand.dart';
-import 'package:umbrella_client/repositories/StandRepo.dart';
+import 'package:umbrella_client/data/models/Stand.dart';
+import 'package:umbrella_client/data/repositories/StandRepo.dart';
+import 'package:umbrella_client/helpers/DisposableProvider.dart';
 import 'package:umbrella_client/utils/stream-utils.dart';
 import 'package:umbrella_client/utils/iterable-utils.dart';
 
-class StandService {
+class StandService implements Disposable {
   final _stands = StandRepo.getStands().toCachedSubject();
 
   Stream<UnmodifiableListView<Stand>> getStands() => _stands;
@@ -17,12 +16,4 @@ class StandService {
   }
 
   dispose() => _stands.close();
-
-  static provider({Widget? child}) {
-    return Provider<StandService>(
-      create: (context) => StandService(),
-      dispose: (_, service) => service.dispose(),
-      child: child,
-    );
-  }
 }

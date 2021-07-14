@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:umbrella_client/models/Stand.dart';
+import 'package:umbrella_client/data/models/Stand.dart';
 
 class StandRepo {
   static Stream<UnmodifiableListView<Stand>> getStands() {

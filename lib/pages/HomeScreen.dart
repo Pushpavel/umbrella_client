@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:umbrella_client/repositories/UmbrellaRepo.dart';
-import 'package:umbrella_client/services/HomeScreenViewModel.dart';
-import 'package:umbrella_client/services/StandService.dart';
+import 'package:umbrella_client/data/repositories/UmbrellaRepo.dart';
+import 'package:umbrella_client/data/services/HomeScreenViewModel.dart';
+import 'package:umbrella_client/data/services/StandService.dart';
+import 'package:umbrella_client/helpers/DisposableProvider.dart';
+import 'package:umbrella_client/helpers/extensions/ContextExtensions.dart';
 import 'package:umbrella_client/widgets/SelectedStandCard.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -10,8 +12,8 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        StandService.provider(),
-        HomeScreenViewModel.provider(),
+        DisposableProvider(create: (_) => StandService()),
+        DisposableProvider(create: (context) => HomeScreenViewModel(context))
       ],
       child: _HomeScreenView(),
     );
@@ -21,7 +23,7 @@ class HomeScreen extends StatelessWidget {
 class _HomeScreenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<HomeScreenViewModel>(context);
+    final model = context.get<HomeScreenViewModel>();
 
     return Scaffold(
       body: Column(
