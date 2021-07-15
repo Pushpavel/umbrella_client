@@ -5,8 +5,9 @@ import 'package:umbrella_client/data/models/UmbrellaPickupState.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:umbrella_client/data/providers/root.dart';
 import 'package:umbrella_client/data/repositories/UmbrellaRepo.dart';
+import 'package:umbrella_client/helpers/errors/Err.dart';
 import 'package:umbrella_client/helpers/extensions/providerExtensions.dart';
-import 'package:umbrella_client/pages/LoadingScreen.dart';
+import 'package:umbrella_client/helpers/result/Result.dart';
 
 class PickupScreen extends StatelessWidget {
   @override
@@ -17,41 +18,30 @@ class PickupScreen extends StatelessWidget {
           builder: (context, ref, _) {
             final requestResult = ref.watch(currentUmbrellaRequestProvider).asResult();
 
-            if (requestResult == null) return LoadingScreen();
+            final pickupStandId = Result.getOrThrowErr(requestResult)?.pickupStandId;
 
-            return requestResult.when(
-              (request) {
-                if (request == null) throw Exception("this should not happen");
+            if (pickupStandId == null) throw InternalErr("pickupStandId must not be null");
 
-                final messageStream = UmbrellaRepo.getUmbrellaPickupState(request.pickupStandId)
-                    .switchMap((state) => getLoadingMessageStream(state));
+            final messageStream = UmbrellaRepo.getUmbrellaPickupState(pickupStandId)
+                .switchMap((state) => getLoadingMessageStream(state));
 
-                return StreamBuilder<String?>(
-                  stream: messageStream,
-                  builder: (context, snapshot) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        if (snapshot.data == null)
-                          CircularProgressIndicator()
-                        else ...[
-                          const Icon(
-                            Icons.access_time_rounded,
-                            color: Colors.green,
-                            size: 60,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 16),
-                            child: Text(snapshot.data!),
-                          )
-                        ],
-                      ],
-                    );
-                  },
+            return StreamBuilder<String?>(
+              stream: messageStream,
+              builder: (context, snapshot) {
+                if (snapshot.data == null) return Center(child: CircularProgressIndicator());
+
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    const Icon(Icons.access_time_rounded, color: Colors.green, size: 60),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: Center(child: Text(snapshot.data!)),
+                    ),
+                  ],
                 );
               },
-              error: (_) => LoadingScreen(), // TODO: go to error page
             );
           },
         ),

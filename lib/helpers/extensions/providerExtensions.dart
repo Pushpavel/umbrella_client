@@ -7,11 +7,6 @@ extension refe<T> on AsyncValue<T> {
     return this.when(
         data: (T value) => Result(value),
         loading: () => null,
-        error: (Object error, StackTrace? stackTrace) {
-          if (error is Err)
-            return Result.error(error);
-          else
-            return Result.error(Err(error, stackTrace));
-        });
+        error: (Object error, StackTrace? stackTrace) => Result.error(Err.from(error, stackTrace)));
   }
 }
