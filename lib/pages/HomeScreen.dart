@@ -52,8 +52,12 @@ class _HomeScreenView extends StatelessWidget {
                     onPressed: enabled
                         ? () async {
                             final selectedStandId = model.selectedStandId$.value;
-                            await UmbrellaRepo.requestUmbrellaPickup(selectedStandId);
-                            // TODO: handle fail state
+                            final success =
+                                await UmbrellaRepo.requestUmbrellaPickup(selectedStandId);
+                            if (!success)
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Request Failed")),
+                              );
                           }
                         : null,
                   );
