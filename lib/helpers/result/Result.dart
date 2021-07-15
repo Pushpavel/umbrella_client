@@ -20,4 +20,9 @@ class Result<T> with _$Result<T> {
     return when((value) => value, error: (e) => throw e);
   }
 
+  static E getOrThrowErr<E>(Result<E>? result) {
+    if (result == null) throw "Result<$E> is null";
+
+    return result.getOrThrow();
+  }
 }

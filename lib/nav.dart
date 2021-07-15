@@ -5,6 +5,7 @@ import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
 import 'package:umbrella_client/data/providers/root.dart';
 import 'package:umbrella_client/helpers/extensions/providerExtensions.dart';
 import 'package:umbrella_client/helpers/simpleNavigator.dart';
+import 'package:umbrella_client/pages/DropScreen.dart';
 import 'package:umbrella_client/pages/HomeScreen.dart';
 import 'package:umbrella_client/pages/LoadingScreen.dart';
 import 'package:umbrella_client/pages/LoginScreen.dart';
@@ -37,9 +38,7 @@ class NavDelegate extends SinglePageRouterDelegate {
               case UmbrellaRequestStatus.REQUESTED:
                 return PickupScreen();
               case UmbrellaRequestStatus.PICKED_UP:
-                // TODO: use this after refactoring DropScreen to use Provider for currentRequest
-                // DropScreen(requestStream: requestStream.map((event) => event!),);
-                return LoadingScreen();
+                return DropScreen();
               default:
                 // TODO: go to error page
                 return LoadingScreen();
