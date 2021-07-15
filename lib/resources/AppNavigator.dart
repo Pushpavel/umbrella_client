@@ -19,8 +19,7 @@ class AppNavigator extends StatefulWidget {
   const AppNavigator({Key? key, required this.authService}) : super(key: key);
 
   @override
-  _AppNavigatorState createState() =>
-      _AppNavigatorState(authService: authService);
+  _AppNavigatorState createState() => _AppNavigatorState(authService: authService);
 }
 
 class _AppNavigatorState extends State<AppNavigator> {
@@ -48,23 +47,15 @@ class _AppNavigatorState extends State<AppNavigator> {
 
       final requestStream = UmbrellaRepo.getUmbrellaRequest(user.requestId!);
 
-      yield* requestStream
-          .map((request) => request?.status)
-          .distinct()
-          .switchMap((status) async* {
-
+      yield* requestStream.map((request) => request?.status).distinct().switchMap((status) async* {
         if (status == null) throw Exception("Internal Error");
 
         switch (status) {
           case UmbrellaRequestStatus.REQUESTED:
-            await context.resetNavStackWith(PickupScreen(
-              requestStream: requestStream.map((event) => event!),
-            ));
+            await context.resetNavStackWith(PickupScreen());
             break;
           case UmbrellaRequestStatus.PICKED_UP:
-            await context.resetNavStackWith(DropScreen(
-              requestStream: requestStream.map((event) => event!),
-            ));
+            await context.resetNavStackWith(DropScreen());
             break;
           case UmbrellaRequestStatus.FAILED:
             //TODO : handle failed irkanae therla :)

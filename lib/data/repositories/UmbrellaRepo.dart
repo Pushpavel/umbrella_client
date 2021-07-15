@@ -3,7 +3,6 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:umbrella_client/data/models/UmbrellaPickupState.dart';
 import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
-import 'package:rxdart/rxdart.dart';
 
 class UmbrellaRepo {
   static Stream<UmbrellaRequest?> getUmbrellaRequest(String requestId) {
@@ -14,7 +13,7 @@ class UmbrellaRepo {
         if (!snap.exists) return null;
         return UmbrellaRequest.fromFirestore(snap);
       },
-    ).shareValue();
+    );
   }
 
   static Stream<UmbrellaPickupState?> getUmbrellaPickupState(String standId) {
