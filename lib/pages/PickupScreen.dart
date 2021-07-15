@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:umbrella_client/data/models/UmbrellaPickupState.dart';
-import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:umbrella_client/data/providers/root.dart';
 import 'package:umbrella_client/data/repositories/UmbrellaRepo.dart';
-import 'package:umbrella_client/helpers/result/Result.dart';
+import 'package:umbrella_client/helpers/extensions/providerExtensions.dart';
 import 'package:umbrella_client/pages/LoadingScreen.dart';
 
 class PickupScreen extends StatelessWidget {
@@ -13,8 +13,10 @@ class PickupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Consumer<Result<UmbrellaRequest?>?>(
-          builder: (context, requestResult, _) {
+        child: Consumer(
+          builder: (context, ref, _) {
+            final requestResult = ref.watch(currentUmbrellaRequestProvider).asResult();
+
             if (requestResult == null) return LoadingScreen();
 
             return requestResult.when(

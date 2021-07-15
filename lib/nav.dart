@@ -2,9 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
-import 'package:umbrella_client/data/models/UmbrellaUser.dart';
-import 'package:umbrella_client/helpers/extensions/ContextExtensions.dart';
-import 'package:umbrella_client/helpers/result/Result.dart';
+import 'package:umbrella_client/data/providers/root.dart';
+import 'package:umbrella_client/helpers/extensions/providerExtensions.dart';
 import 'package:umbrella_client/helpers/simpleNavigator.dart';
 import 'package:umbrella_client/pages/HomeScreen.dart';
 import 'package:umbrella_client/pages/LoadingScreen.dart';
@@ -13,8 +12,8 @@ import 'package:umbrella_client/pages/PickupScreen.dart';
 
 class NavDelegate extends SinglePageRouterDelegate {
   @override
-  Widget buildPage(BuildContext context) {
-    final userResult = context.get<Result<UmbrellaUser?>?>();
+  Widget buildPage(context, ref) {
+    final userResult = ref.watch(authProvider).asResult();
 
     if (userResult == null) return LoadingScreen();
 
@@ -22,7 +21,9 @@ class NavDelegate extends SinglePageRouterDelegate {
       (user) {
         if (user == null) return LoginScreen();
 
-        final requestResult = context.get<Result<UmbrellaRequest?>?>();
+        final requestResult = ref.watch(currentUmbrellaRequestProvider).asResult();
+
+        requestResult?.getOrThrow();
 
         if (requestResult == null) return LoadingScreen();
 
