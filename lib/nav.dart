@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
 import 'package:umbrella_client/data/providers/root.dart';
+import 'package:umbrella_client/helpers/errors/Err.dart';
 import 'package:umbrella_client/helpers/extensions/providerExtensions.dart';
 import 'package:umbrella_client/helpers/simpleNavigator.dart';
 import 'package:umbrella_client/pages/DropScreen.dart';
+import 'package:umbrella_client/pages/ErrorScreen.dart';
 import 'package:umbrella_client/pages/HomeScreen.dart';
 import 'package:umbrella_client/pages/LoadingScreen.dart';
 import 'package:umbrella_client/pages/LoginScreen.dart';
@@ -40,14 +42,15 @@ class NavDelegate extends SinglePageRouterDelegate {
               case UmbrellaRequestStatus.PICKED_UP:
                 return DropScreen();
               default:
-                // TODO: go to error page
-                return LoadingScreen();
+                return ErrorScreen(
+                  err: InternalErr("Current Umbrella Request Status must not be ${request.status}"),
+                );
             }
           },
-          error: (e) => LoadingScreen(), // TODO: go to error page
+          error: (e) => ErrorScreen(err: e),
         );
       },
-      error: (e) => LoadingScreen(), // TODO: go to error page
+      error: (e) => ErrorScreen(err: e),
     );
   }
 }
