@@ -3,12 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Stand {
   final String name;
   final String id;
-  final String requestId;
+  final String? requestId;
 
   Stand({
     required this.id,
     required this.name,
-    required this.requestId,
+    this.requestId,
   });
 
   factory Stand.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snap) {

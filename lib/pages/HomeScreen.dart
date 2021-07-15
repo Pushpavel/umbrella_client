@@ -23,47 +23,58 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _HomeScreenView extends StatelessWidget {
+  final isLoading = ValueNotifier(false);
+
   @override
   Widget build(BuildContext context) {
     final model = context.get<HomeScreenViewModel>();
     final standService = context.get<StandService>();
 
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SelectedStandCard(
-            selectedStandId$: model.selectedStandId$,
-          ),
-          Container(
-            padding: EdgeInsets.all(32),
-            alignment: Alignment.bottomCenter,
-            child: StreamBuilder<Stand?>(
-                stream:
-                    model.selectedStandId$.switchMap((standId) => standService.getStand(standId)),
-                builder: (context, snapshot) {
-                  final enabled = snapshot.data?.requestId == null;
-                  print(enabled);
+      body: ValueListenableBuilder<bool>(
+        valueListenable: isLoading,
+        builder: (context, loading, _) {
+          if (loading) return Center(child: CircularProgressIndicator());
 
-                  return FloatingActionButton.extended(
-                    icon: Icon(Icons.umbrella),
-                    label: Text("REQUEST UMBRELLA"),
-                    onPressed: enabled
-                        ? () async {
-                            final selectedStandId = model.selectedStandId$.value;
-                            final success =
-                                await UmbrellaRepo.requestUmbrellaPickup(selectedStandId);
-                            if (!success)
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("Request Failed")),
-                              );
-                          }
-                        : null,
-                  );
-                }),
-          )
-        ],
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SelectedStandCard(
+                selectedStandId$: model.selectedStandId$,
+              ),
+              Container(
+                padding: EdgeInsets.all(32),
+                alignment: Alignment.bottomCenter,
+                child: StreamBuilder<Stand?>(
+                    stream: model.selectedStandId$
+                        .switchMap((standId) => standService.getStand(standId)),
+                    builder: (context, snapshot) {
+                      final enabled = snapshot.data?.requestId == null;
+
+                      return FloatingActionButton.extended(
+                        icon: Icon(Icons.umbrella),
+                        label: Text("REQUEST UMBRELLA"),
+                        onPressed: enabled
+                            ? () async {
+                                final selectedStandId = model.selectedStandId$.value;
+                                isLoading.value = true;
+                                final success =
+                                    await UmbrellaRepo.requestUmbrellaPickup(selectedStandId);
+                                if (!success) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text("Request Failed")),
+                                  );
+                                  isLoading.value = false;
+                                }
+                              }
+                            : null,
+                      );
+                    }),
+              )
+            ],
+          );
+        },
       ),
     );
   }
