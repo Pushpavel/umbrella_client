@@ -1,0 +1,67 @@
+# Runs flutter tests and statically analyzes dart code for errors
+# this workflow is run on every commit in the repository
+name: CI
+on: [ push, pull_request ]
+env:
+  java_version: "12.x"
+
+jobs:
+
+  # Pin actions to a full length commit SHA for Security
+  # https://docs.github.com/en/actions/learn-github-actions/security-hardening-for-github-actions#using-third-party-actions
+  security_hardening:
+    name: Check security hardening
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v2.3.4
+
+      - name: Ensure SHA pinned actions
+        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@1.0.4
+
+  ci:
+    name: Run flutter ${{ matrix.category }}
+    needs: security_hardening
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        category: [ format, analyze, test ]
+      fail-fast: false
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v2.3.4
+
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ env.java_version }}
+
+      - name: Get Flutter version
+        id: get-flutter-version
+        uses: zgosalvez/github-actions-get-flutter-version-env@v1.1.4
+
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v2.1.6
+        with:
+          path: /opt/hostedtoolcache/flutter
+          key: ${{ runner.OS }}-flutter-install-cache-${{ steps.get-flutter-version.version }}
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: ${{ steps.get-flutter-version.version }}
+
+      - name: Install Flutter Dependencies
+        run: flutter pub get
+
+      - name: Run formatting check with line length 100
+        if: matrix.category == 'format'
+        run: flutter format --dry-run . --set-exit-if-changed --line-length=100
+
+      - name: Run Code Generation
+        if: matrix.category != 'format'
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      - name: Run ${{ matrix.category }}
+        if: matrix.category != 'format'
+        run: flutter ${{ matrix.category }}
