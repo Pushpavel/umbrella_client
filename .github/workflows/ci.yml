@@ -6,22 +6,8 @@ env:
   java_version: "12.x"
 
 jobs:
-
-  # Pin actions to a full length commit SHA for Security
-  # https://docs.github.com/en/actions/learn-github-actions/security-hardening-for-github-actions#using-third-party-actions
-  security_hardening:
-    name: Check security hardening
-    runs-on: ubuntu-latest
-    steps:
-      - name: Clone the repository
-        uses: actions/checkout@v2.3.4
-
-      - name: Ensure SHA pinned actions
-        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@v1.0.4
-
   ci:
     name: Run flutter ${{ matrix.category }}
-    needs: security_hardening
     runs-on: ubuntu-latest
     strategy:
       matrix:
