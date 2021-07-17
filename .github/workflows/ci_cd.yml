@@ -1,0 +1,91 @@
+# Runs flutter tests and statically analyzes dart code for errors
+# this workflow is run on every commit in the repository
+name: CI/CD
+on: [ push, pull_request ]
+jobs:
+  continous_integration:
+    name: Run flutter ${{ matrix.category }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        category: [ format, analyze, test ]
+      fail-fast: false
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v2.3.4
+
+      - name: Setup Java
+        uses: actions/setup-java@v2.1.0
+        with:
+          distribution: 'zulu'
+          java-version: '12'
+
+      - name: Get Flutter version
+        id: get-flutter-version
+        uses: zgosalvez/github-actions-get-flutter-version-env@v1.1.4
+
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v2.1.6
+        with:
+          path: /opt/hostedtoolcache/flutter
+          key: ${{ runner.OS }}-flutter-install-cache-${{ steps.get-flutter-version.version }}
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1.5.3
+        with:
+          flutter-version: ${{ steps.get-flutter-version.version }}
+
+      - name: Install Flutter Dependencies
+        run: flutter pub get
+
+      - name: Run formatting check with line length 120
+        if: matrix.category == 'format'
+        run: flutter format --dry-run . --set-exit-if-changed --line-length=120
+
+      - name: Run Code Generation
+        if: matrix.category != 'format'
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      - name: Run ${{ matrix.category }}
+        if: matrix.category != 'format'
+        run: flutter ${{ matrix.category }}
+
+
+
+  # Create Release Draft only on pushes to master branch
+  create_release_draft:
+    name: Create Draft Release
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+    needs: continous_integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v2.3.4
+
+      # Remove old release drafts by using the curl request for the releases with draft flag
+      - name: Remove Old Release Drafts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/releases \
+            | tr '\r\n' ' ' \
+            | jq '.[] | select(.draft == true) | .id' \
+            | xargs -I '{}' \
+          curl -X DELETE -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/releases/{}
+
+      # Extract version name and number from pubspec.yaml
+      - name: Extract App Version
+        id: app_versions
+        uses: its404/get-flutter-version@v1.0.0
+
+      # Create new release draft - which is not publicly visible and requires manual acceptance
+      - name: Create Release Draft
+        id: createDraft
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.app_versions.outputs.version_number }}+${{ steps.app_versions.outputs.build_number }}
+          # TODO: body: ${{ needs.build.outputs.changelog }}
+          commit: ${{ github.ref }}
+          draft: true
+          prerelease: true
