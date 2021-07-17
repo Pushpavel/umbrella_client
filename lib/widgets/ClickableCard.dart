@@ -6,8 +6,7 @@ class ClickableCard extends StatelessWidget {
   final Function()? onClick;
   final EdgeInsetsGeometry? padding;
 
-  const ClickableCard({Key? key, this.onClick, this.child, this.padding})
-      : super(key: key);
+  const ClickableCard({Key? key, this.onClick, this.child, this.padding}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

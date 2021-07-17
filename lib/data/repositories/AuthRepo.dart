@@ -14,9 +14,7 @@ class AuthRepo {
 
       final userRef = FirebaseFirestore.instance.collection("Users").doc(user.uid);
 
-      yield* userRef
-          .snapshots()
-          .map((userData) => UmbrellaUser.fromDynamic(user, userData.data()!));
+      yield* userRef.snapshots().map((userData) => UmbrellaUser.fromDynamic(user, userData.data()!));
     });
   }
 

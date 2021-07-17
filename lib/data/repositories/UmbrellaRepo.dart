@@ -17,11 +17,7 @@ class UmbrellaRepo {
   }
 
   static Stream<UmbrellaPickupState?> getUmbrellaPickupState(String standId) {
-    final query = FirebaseDatabase.instance
-        .reference()
-        .child("activeStandRequests")
-        .child(standId)
-        .child("request");
+    final query = FirebaseDatabase.instance.reference().child("activeStandRequests").child(standId).child("request");
 
     return query.onValue.map((event) => UmbrellaPickupState.fromRTDB(standId, event.snapshot));
   }

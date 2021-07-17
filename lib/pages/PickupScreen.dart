@@ -22,8 +22,8 @@ class PickupScreen extends StatelessWidget {
 
             if (pickupStandId == null) throw InternalErr("pickupStandId must not be null");
 
-            final messageStream = UmbrellaRepo.getUmbrellaPickupState(pickupStandId)
-                .switchMap((state) => getLoadingMessageStream(state));
+            final messageStream =
+                UmbrellaRepo.getUmbrellaPickupState(pickupStandId).switchMap((state) => getLoadingMessageStream(state));
 
             return StreamBuilder<String?>(
               stream: messageStream,

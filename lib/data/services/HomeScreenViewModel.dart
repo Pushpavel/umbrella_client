@@ -12,12 +12,7 @@ class HomeScreenViewModel implements Disposable {
 
     // initializing selectedStandId
     selectedStandId$.addStream(
-      standService
-          .getStands()
-          .where((event) => event.isNotEmpty)
-          .map((event) => event.first.id)
-          .first
-          .asStream(),
+      standService.getStands().where((event) => event.isNotEmpty).map((event) => event.first.id).first.asStream(),
     );
   }
 

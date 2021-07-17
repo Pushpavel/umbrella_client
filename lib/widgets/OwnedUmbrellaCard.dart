@@ -21,15 +21,12 @@ class OwnedUmbrellaCard extends StatelessWidget {
             margin: EdgeInsets.only(top: 16),
             padding: EdgeInsets.only(left: 8),
             decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey, width: 1),
-                borderRadius: BorderRadius.all(Radius.circular(8))),
+                border: Border.all(color: Colors.grey, width: 1), borderRadius: BorderRadius.all(Radius.circular(8))),
             child: Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 Text(umbrellaId, style: theme.textTheme.subtitle1),
-                IconButton(
-                    icon: Icon(Icons.copy),
-                    onPressed: () {}) //what is the use copying this ???
+                IconButton(icon: Icon(Icons.copy), onPressed: () {}) //what is the use copying this ???
               ],
             ),
           ),

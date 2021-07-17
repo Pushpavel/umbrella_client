@@ -47,8 +47,7 @@ class _HomeScreenView extends StatelessWidget {
                 padding: EdgeInsets.all(32),
                 alignment: Alignment.bottomCenter,
                 child: StreamBuilder<Stand?>(
-                    stream: model.selectedStandId$
-                        .switchMap((standId) => standService.getStand(standId)),
+                    stream: model.selectedStandId$.switchMap((standId) => standService.getStand(standId)),
                     builder: (context, snapshot) {
                       final enabled = snapshot.data?.requestId == null;
 
@@ -59,8 +58,7 @@ class _HomeScreenView extends StatelessWidget {
                             ? () async {
                                 final selectedStandId = model.selectedStandId$.value;
                                 isLoading.value = true;
-                                final success =
-                                    await UmbrellaRepo.requestUmbrellaPickup(selectedStandId);
+                                final success = await UmbrellaRepo.requestUmbrellaPickup(selectedStandId);
                                 if (!success) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text("Request Failed")),

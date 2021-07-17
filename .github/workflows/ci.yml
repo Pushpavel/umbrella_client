@@ -40,9 +40,9 @@ jobs:
       - name: Install Flutter Dependencies
         run: flutter pub get
 
-      - name: Run formatting check with line length 100
+      - name: Run formatting check with line length 120
         if: matrix.category == 'format'
-        run: flutter format --dry-run . --set-exit-if-changed --line-length=100
+        run: flutter format --dry-run . --set-exit-if-changed --line-length=120
 
       - name: Run Code Generation
         if: matrix.category != 'format'
