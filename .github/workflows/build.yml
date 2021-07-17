@@ -31,7 +31,7 @@ jobs:
 
       # Generate code using build_runner
       - name: Run Code Generation
-        run: flutter pub run build_runner watch --delete-conflicting-outputs
+        run: flutter pub run build_runner build --delete-conflicting-outputs
 
       # Statically analyze the Dart code for any errors.
       - name: Run Flutter Analyze
@@ -68,7 +68,7 @@ jobs:
 
       # Generate code using build_runner
       - name: Run Code Generation
-        run: flutter pub run build_runner watch --delete-conflicting-outputs
+        run: flutter pub run build_runner build --delete-conflicting-outputs
 
       # Build App Bundle.
       - name: Build Android App Bundle
