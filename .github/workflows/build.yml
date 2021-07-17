@@ -66,6 +66,12 @@ jobs:
       - name: Get Flutter Dependencies
         run: flutter pub get
 
+      # Generate google services file for Firebase
+      - name: Provide Firebase Config for Android
+        env:
+          FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+        run: echo $FIREBASE_CONFIG > ./android/app/google-services.json
+
       # Generate code using build_runner
       - name: Run Code Generation
         run: flutter pub run build_runner build --delete-conflicting-outputs
