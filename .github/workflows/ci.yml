@@ -2,9 +2,6 @@
 # this workflow is run on every commit in the repository
 name: CI
 on: [ push, pull_request ]
-env:
-  java_version: "12.x"
-
 jobs:
   ci:
     name: Run flutter ${{ matrix.category }}
@@ -20,7 +17,8 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v2.1.0
         with:
-          java-version: ${{ env.java_version }}
+          distribution: 'zulu'
+          java-version: '12'
 
       - name: Get Flutter version
         id: get-flutter-version
