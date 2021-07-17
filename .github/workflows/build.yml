@@ -25,9 +25,13 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
 
-      # Get flutter dependencies.
+      # Download flutter dependencies.
       - name: Get Flutter Dependencies
         run: flutter pub get
+
+      # Generate code using build_runner
+      - name: Run Code Generation
+        run: flutter pub run build_runner watch --delete-conflicting-outputs
 
       # Statically analyze the Dart code for any errors.
       - name: Run Flutter Analyze
@@ -58,9 +62,13 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
 
-      # Get flutter dependencies.
+      # Download flutter dependencies.
       - name: Get Flutter Dependencies
         run: flutter pub get
+
+      # Generate code using build_runner
+      - name: Run Code Generation
+        run: flutter pub run build_runner watch --delete-conflicting-outputs
 
       # Build App Bundle.
       - name: Build Android App Bundle
