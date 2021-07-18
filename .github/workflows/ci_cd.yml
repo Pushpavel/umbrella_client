@@ -78,6 +78,11 @@ jobs:
         id: app_versions
         uses: its404/get-flutter-version@v1.0.0
 
+      # Extract Release Notes from CHANGELOG.md
+      - name: Extract release notes
+        id: extract-release-notes
+        uses: ffurrer2/extract-release-notes@v1.8.0
+
       # Create new release draft - which is not publicly visible and requires manual acceptance
       - name: Create Release Draft
         id: createDraft
@@ -85,7 +90,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ steps.app_versions.outputs.version_number }}+${{ steps.app_versions.outputs.build_number }}
-          # TODO: body: ${{ needs.build.outputs.changelog }}
+          body: ${{ steps.extract-release-notes.outputs.release_notes }}
           commit: ${{ github.ref }}
           draft: true
           prerelease: true
