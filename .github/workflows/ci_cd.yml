@@ -48,7 +48,7 @@ jobs:
 
       - name: Run ${{ matrix.category }}
         if: matrix.category != 'format'
-        run: flutter ${{ matrix.category }}
+        run: flutter ${{ matrix.category }} --no-pub
 
 
 

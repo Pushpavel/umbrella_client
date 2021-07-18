@@ -1,0 +1,130 @@
+# Builds and Releases when a draft release in the github repository is published
+# this workflow is run at the commit where the draft release originated (see ./ci_cd.yml)
+
+name: Release
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    outputs:
+      app_version: v${{ steps.app_versions.outputs.version_number }}+${{ steps.app_versions
+      .outputs.build_number }}
+    steps:
+      # Clones at commit where release draft originated
+      - name: Clone the repository
+        uses: actions/checkout@v2.3.4
+
+      - name: Setup Java
+        uses: actions/setup-java@v2.1.0
+        with:
+          distribution: 'zulu'
+          java-version: '12'
+
+      - name: Get Flutter version
+        id: get-flutter-version
+        uses: zgosalvez/github-actions-get-flutter-version-env@v1.1.4
+
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v2.1.6
+        with:
+          path: /opt/hostedtoolcache/flutter
+          key: ${{ runner.OS }}-flutter-install-cache-${{ steps.get-flutter-version.version }}
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1.5.3
+        with:
+          flutter-version: ${{ steps.get-flutter-version.version }}
+
+      - name: Install Flutter Dependencies
+        run: flutter pub get
+
+      - name: Run Code Generation
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+
+      - name: Provide Firebase Config
+        id: firebase_config
+        uses: timheuer/base64-to-file@v1.0.3
+        with:
+          fileName: google-services.json
+          encodedString: ${{ secrets.FIREBASE_CONFIG_BASE64 }}
+      - run: mv steps.firebase_config.outputs.filePath ./android/app/google-services.json
+
+      - name: Provide Android keystore
+        id: android_keystore
+        uses: timheuer/base64-to-file@v1.0.3
+        with:
+          fileName: keystore.jks
+          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      - run: |
+          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
+
+
+      - name: Build an Android App Bundle file
+        run: flutter build appbundle
+
+      # Extract version name and number from pubspec.yaml
+      - name: Extract App Version
+        id: app_versions
+        uses: its404/get-flutter-version@v1.0.0
+
+      - name: Upload the aab artifact
+        uses: actions/upload-artifact@v2.2.4
+        with:
+          name: aab-artifact
+          path: build/app/outputs/bundle/release/app-release.aab
+          retention-days: 1
+          if-no-files-found: error
+
+
+  publish:
+    name: Publish to Google PlayStore
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Generate What's New file
+        run: echo ${{ github.event.release.body }} > whatsNew/whatsnew-en-US
+
+      - name: Download aab-artifact
+        uses: actions/download-artifact@v2.0.10
+        with:
+          name: aab-artifact
+
+      - name: Publish to Google PlayStore
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: dev.project_umbrella.umbrella_client
+          releaseFiles: app-release.aab
+          track: internalsharing
+          whatsNewDirectory: whatsNew
+
+
+  after-release:
+    name: Update Changelog
+    runs-on: ubuntu-latest
+    needs: [ build,publish ]
+    steps:
+      # Clones at commit where release draft originated
+      - name: Clone the repository
+        uses: actions/checkout@v2.3.4
+
+      - name: Update changelog
+        uses: thomaseizinger/keep-a-changelog-new-release@v1.2.1
+        with:
+          version: ${{ needs.build.steps.app_version }}
+
+      - name: Push changelog & Tag
+        uses: stefanzweifel/git-auto-commit-action@v4.11.0
+        with:
+          commit_message: updated changelog for ${{ needs.build.steps.app_version }}
+          file_pattern: CHANGELOG.md
+          tagging_message: ${{ needs.build.steps.app_version }}
+          skip_fetch: true
