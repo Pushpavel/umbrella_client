@@ -91,7 +91,8 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ steps.app_versions.outputs.version_number }}+${{ steps.app_versions.outputs.build_number }}
+          tag: v${{ steps.app_versions.outputs.version_number }}+${{ steps.app_versions.outputs
+          .build_number }}
           body: ${{ steps.extract-release-notes.outputs.changes }}
           commit: ${{ github.ref }}
           draft: true
