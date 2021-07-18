@@ -89,7 +89,7 @@ jobs:
     needs: build
     steps:
       - name: Generate What's New file
-        run: echo ${{ github.event.release.body }} > whatsNew/whatsnew-en-US
+        run: echo ${{ github.event.release.body }} > whatsnew-en-US
 
       - name: Download aab-artifact
         uses: actions/download-artifact@v2.0.10
@@ -103,7 +103,7 @@ jobs:
           packageName: dev.project_umbrella.umbrella_client
           releaseFiles: app-release.aab
           track: internalsharing
-          whatsNewDirectory: whatsNew
+          whatsNewDirectory: ./
 
 
   after-release:
