@@ -60,9 +60,18 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     needs: ci
+    outputs:
+      release_notes: ${{ steps.extract-release-notes.outputs.changes }}
     steps:
       - name: Clone the repository
         uses: actions/checkout@v2.3.4
+
+      # Extract Release Notes from CHANGELOG.md
+      - name: Extract release notes
+        id: extract-release-notes
+        uses: mindsers/changelog-reader-action@v2
+        with:
+          version: Unreleased
 
       - name: Setup Java
         uses: actions/setup-java@v2.1.0
@@ -117,7 +126,7 @@ jobs:
     needs: [ ci,build ]
     steps:
       - name: Generate What's New file
-        run: echo ${{ github.event.release.body }} > whatsnew-en-US
+        run: echo ${{ needs.build.outputs.release_notes }} > whatsnew-en-US
 
       - name: Download aab-artifact
         uses: actions/download-artifact@v2.0.10
@@ -159,13 +168,6 @@ jobs:
         id: app_versions
         uses: its404/get-flutter-version@v1.0.0
 
-      # Extract Release Notes from CHANGELOG.md
-      - name: Extract release notes
-        id: extract-release-notes
-        uses: mindsers/changelog-reader-action@v2
-        with:
-          version: Unreleased
-
       # Create new release draft - which is not publicly visible and requires manual acceptance
       - name: Create Release Draft
         id: createDraft
@@ -173,7 +175,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: v${{ steps.app_versions.outputs.version_number }}+${{ steps.app_versions.outputs.build_number }}
-          body: ${{ steps.extract-release-notes.outputs.changes }}
+          body: ${{ needs.build.outputs.release_notes }}
           commit: ${{ github.ref }}
           draft: true
           prerelease: true
