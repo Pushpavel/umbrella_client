@@ -10,6 +10,7 @@ class StandContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      enabled: stand.getStatus() == StandStatus.READY,
       leading: Icon(Icons.place),
       title: Text(stand.name),
     );

@@ -51,7 +51,7 @@ class _StandList extends HookWidget {
       (stands) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          ...stands.map((stand) => StandCard(stand: stand)),
+          ...stands.map((stand) => StandCard(key: ValueKey(stand.id), stand: stand)),
         ],
       ),
       error: (err) => ErrorScreen(err: err),

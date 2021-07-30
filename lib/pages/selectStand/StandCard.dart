@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:umbrella_client/data/models/Stand.dart';
@@ -11,12 +12,36 @@ class StandCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedCard(
-      child: InkWell(
-        splashFactory: InkRipple.splashFactory,
-        child: StandContent(stand: stand),
-        onTap: () {},
-      ),
+    final standContent = StandContent(
+      key: ValueKey(stand.id),
+      stand: stand,
     );
+
+    switch (stand.getStatus()) {
+      case StandStatus.READY:
+        return OutlinedCard(
+          child: InkWell(
+            splashFactory: InkRipple.splashFactory,
+            child: standContent,
+            onTap: () {},
+          ),
+        );
+      case StandStatus.EMPTY:
+        return OutlinedCard(child: standContent);
+      case StandStatus.BUSY:
+        return OutlinedCard(
+          elevation: 0,
+          color: Color.lerp(Colors.white, Theme.of(context).colorScheme.secondary, 0.12),
+          outlineColor: Color.lerp(Colors.white, Theme.of(context).colorScheme.secondary, 0.5),
+          child: standContent,
+        );
+      case StandStatus.OFFLINE:
+        return OutlinedCard(
+          elevation: 0,
+          color: Color.lerp(Colors.white, Theme.of(context).errorColor, 0.12),
+          outlineColor: Color.lerp(Colors.white, Theme.of(context).errorColor, 0.3),
+          child: standContent,
+        );
+    }
   }
 }
