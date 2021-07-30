@@ -18,17 +18,11 @@ class NavDelegate extends SinglePageRouterDelegate {
   Widget buildPage(context, ref) {
     final userResult = ref.watch(authProvider).asResult();
 
-    if (userResult == null) return LoadingScreen();
-
     return userResult.when(
       (user) {
         if (user == null) return LoginScreen();
 
         final requestResult = ref.watch(currentUmbrellaRequestProvider).asResult();
-
-        requestResult?.getOrThrow();
-
-        if (requestResult == null) return LoadingScreen();
 
         return requestResult.when(
           (request) {
@@ -48,9 +42,11 @@ class NavDelegate extends SinglePageRouterDelegate {
             }
           },
           error: (e) => ErrorScreen(err: e),
+          loading: () => LoadingScreen(),
         );
       },
       error: (e) => ErrorScreen(err: e),
+      loading: () => LoadingScreen(),
     );
   }
 }

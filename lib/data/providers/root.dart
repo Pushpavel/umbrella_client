@@ -10,7 +10,7 @@ final authProvider = StreamProvider((_) => AuthRepo.getUser());
 final currentUmbrellaRequestProvider = StreamProvider<UmbrellaRequest?>((ref) {
   final userResult = ref.watch(authProvider).asResult();
 
-  final stream = userResult?.getOrNull()?.let((user) {
+  final stream = userResult.getOrNull()?.let((user) {
     final requestId = user.requestId;
 
     if (requestId == null) return Stream.value(null);

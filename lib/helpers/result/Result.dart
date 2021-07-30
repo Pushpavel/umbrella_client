@@ -12,12 +12,14 @@ class Result<T> with _$Result<T> {
 
   factory Result.error(Err exception) = Failure;
 
+  factory Result.loading() = Loading;
+
   T? getOrNull() {
-    return when((value) => value, error: (e) => null);
+    return when((value) => value, error: (e) => null, loading: () => null);
   }
 
   T getOrThrow() {
-    return when((value) => value, error: (e) => throw e);
+    return when((value) => value, error: (e) => throw e, loading: () => throw LoadingErr());
   }
 
   static E getOrThrowErr<E>(Result<E>? result) {
