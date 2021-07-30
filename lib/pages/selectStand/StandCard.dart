@@ -22,7 +22,7 @@ class StandCard extends StatelessWidget {
     switch (stand.getStatus()) {
       case StandStatus.READY:
         return OutlinedCard(
-          color: selected ? Theme.of(context).primaryColorLight : null,
+          color: selected ? Theme.of(context).colorScheme.primaryVariant : null,
           outlineColor: selected ? Theme.of(context).primaryColor : null,
           child: InkWell(
             splashFactory: InkRipple.splashFactory,
@@ -38,15 +38,15 @@ class StandCard extends StatelessWidget {
       case StandStatus.BUSY:
         return OutlinedCard(
           elevation: 0,
-          color: Color.lerp(Colors.white, Theme.of(context).accentColor, 0.12),
-          outlineColor: Color.lerp(Colors.white, Theme.of(context).accentColor, 0.5),
+          color: Color.lerp(Colors.white, Theme.of(context).colorScheme.secondaryVariant, 0.12),
+          outlineColor: Color.lerp(Colors.white, Theme.of(context).colorScheme.secondaryVariant, 0.5),
           child: standContent,
         );
       case StandStatus.OFFLINE:
         return OutlinedCard(
           elevation: 0,
-          color: Color.lerp(Colors.white, Theme.of(context).errorColor, 0.12),
-          outlineColor: Color.lerp(Colors.white, Theme.of(context).errorColor, 0.3),
+          color: Color.lerp(Colors.white, Theme.of(context).colorScheme.error, 0.12),
+          outlineColor: Color.lerp(Colors.white, Theme.of(context).colorScheme.error, 0.3),
           child: standContent,
         );
     }

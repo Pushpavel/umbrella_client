@@ -1,25 +1,13 @@
 import 'package:flutter/material.dart';
 
-final appThemeData = ThemeData(
-  /// Card Outline
-  cardTheme: CardTheme(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8),
-      side: BorderSide(
-        color: Colors.black12,
-        width: 1,
-      ),
-    ),
+final appThemeData = ThemeData.from(
+  colorScheme: ColorScheme.light(
+    primary: Color(0xff048fff),
+    primaryVariant: Color(0xffeff7ff),
+    secondary: Color.fromRGBO(85, 85, 85, 1),
+    secondaryVariant: Color.fromRGBO(255, 184, 0, 1),
+    error: Color.fromRGBO(255, 94, 4, 1),
   ),
-
-  /// Color Scheme
-  primaryColor: Color(0xff048fff),
-  primaryColorLight: Color(0xffeff7ff),
-  errorColor: Color.fromRGBO(255, 94, 4, 1),
-  accentColor: Color.fromRGBO(255, 184, 0, 1),
-
-  /// Typography
-  fontFamily: "Roboto",
   textTheme: TextTheme(
     headline1: TextStyle(
       fontSize: 28,
@@ -44,6 +32,17 @@ final appThemeData = ThemeData(
       fontSize: 14,
       fontWeight: FontWeight.w500,
       letterSpacing: 0.17,
+    ),
+  ),
+).copyWith(
+  /// Card Outline
+  cardTheme: CardTheme(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+      side: BorderSide(
+        color: Colors.black12,
+        width: 1,
+      ),
     ),
   ),
 );
