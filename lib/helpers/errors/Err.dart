@@ -43,3 +43,10 @@ class Err extends Error {
 class InternalErr extends Err {
   InternalErr([String message = ""]) : super(message);
 }
+
+/**
+ * Trying to access data with is yet to be ready
+ */
+class LoadingErr extends Err {
+  LoadingErr() : super("Trying to access data which is not available yet");
+}
