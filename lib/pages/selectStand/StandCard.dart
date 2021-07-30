@@ -27,7 +27,10 @@ class StandCard extends StatelessWidget {
           ),
         );
       case StandStatus.EMPTY:
-        return OutlinedCard(child: standContent);
+        return OutlinedCard(
+          elevation: 0,
+          child: standContent,
+        );
       case StandStatus.BUSY:
         return OutlinedCard(
           elevation: 0,
