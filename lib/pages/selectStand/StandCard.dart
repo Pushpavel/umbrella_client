@@ -7,8 +7,10 @@ import 'package:umbrella_client/widgets/OutlinedCard.dart';
 
 class StandCard extends StatelessWidget {
   final Stand stand;
+  final bool selected;
+  final Function() onTap;
 
-  const StandCard({Key? key, required this.stand}) : super(key: key);
+  const StandCard({Key? key, required this.stand, required this.selected, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +22,12 @@ class StandCard extends StatelessWidget {
     switch (stand.getStatus()) {
       case StandStatus.READY:
         return OutlinedCard(
+          color: selected ? Theme.of(context).primaryColorLight : null,
+          outlineColor: selected ? Theme.of(context).primaryColor : null,
           child: InkWell(
             splashFactory: InkRipple.splashFactory,
             child: standContent,
-            onTap: () {},
+            onTap: onTap,
           ),
         );
       case StandStatus.EMPTY:

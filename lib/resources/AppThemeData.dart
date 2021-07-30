@@ -14,6 +14,7 @@ final appThemeData = ThemeData(
 
   /// Color Scheme
   primaryColor: Color(0xff048fff),
+  primaryColorLight: Color(0xffeff7ff),
   errorColor: Color.fromRGBO(255, 94, 4, 1),
   accentColor: Color.fromRGBO(255, 184, 0, 1),
 
