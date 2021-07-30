@@ -1,5 +1,32 @@
 import 'package:flutter/material.dart';
 
+final appTextTheme = TextTheme(
+  headline1: TextStyle(
+    fontSize: 28,
+    fontWeight: FontWeight.w700,
+  ),
+  headline2: TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+  ),
+  headline3: TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+  ),
+  subtitle1: TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  ),
+  subtitle2: TextStyle(
+    fontSize: 14,
+  ),
+  button: TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.17,
+  ),
+);
+
 final appThemeData = ThemeData(
   /// Card Outline
   cardTheme: CardTheme(
@@ -20,30 +47,7 @@ final appThemeData = ThemeData(
 
   /// Typography
   fontFamily: "Roboto",
-  textTheme: TextTheme(
-    headline1: TextStyle(
-      fontSize: 28,
-      fontWeight: FontWeight.w700,
-    ),
-    headline2: TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w700,
-    ),
-    headline3: TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w500,
-    ),
-    subtitle1: TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.w500,
-    ),
-    subtitle2: TextStyle(
-      fontSize: 14,
-    ),
-    button: TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      letterSpacing: 0.17,
-    ),
-  ),
+  textTheme: appTextTheme,
+  primaryTextTheme: appTextTheme,
+  accentTextTheme: appTextTheme,
 );
