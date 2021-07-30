@@ -13,10 +13,9 @@ final appThemeData = ThemeData(
   ),
 
   /// Color Scheme
-  colorScheme: ColorScheme.light(
-    error: Color.fromRGBO(255, 94, 4, 1),
-    secondary: Color.fromRGBO(255, 184, 0, 1),
-  ),
+  primaryColor: Color(0xff048fff),
+  errorColor: Color.fromRGBO(255, 94, 4, 1),
+  accentColor: Color.fromRGBO(255, 184, 0, 1),
 
   /// Typography
   fontFamily: "Roboto",

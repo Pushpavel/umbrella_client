@@ -34,8 +34,8 @@ class StandCard extends StatelessWidget {
       case StandStatus.BUSY:
         return OutlinedCard(
           elevation: 0,
-          color: Color.lerp(Colors.white, Theme.of(context).colorScheme.secondary, 0.12),
-          outlineColor: Color.lerp(Colors.white, Theme.of(context).colorScheme.secondary, 0.5),
+          color: Color.lerp(Colors.white, Theme.of(context).accentColor, 0.12),
+          outlineColor: Color.lerp(Colors.white, Theme.of(context).accentColor, 0.5),
           child: standContent,
         );
       case StandStatus.OFFLINE:
