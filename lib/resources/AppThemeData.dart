@@ -1,33 +1,40 @@
 import 'package:flutter/material.dart';
 
-final appTextTheme = TextTheme(
-  headline1: TextStyle(
-    fontSize: 28,
-    fontWeight: FontWeight.w700,
+final appThemeData = ThemeData.from(
+  colorScheme: ColorScheme.light(
+    primary: Color(0xff048fff),
+    primaryVariant: Color(0xffeff7ff),
+    secondary: Color.fromRGBO(85, 85, 85, 1),
+    secondaryVariant: Color.fromRGBO(255, 184, 0, 1),
+    error: Color.fromRGBO(255, 94, 4, 1),
   ),
-  headline2: TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.w700,
+  textTheme: TextTheme(
+    headline1: TextStyle(
+      fontSize: 28,
+      fontWeight: FontWeight.w700,
+    ),
+    headline2: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w700,
+    ),
+    headline3: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w500,
+    ),
+    subtitle1: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+    ),
+    subtitle2: TextStyle(
+      fontSize: 14,
+    ),
+    button: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.17,
+    ),
   ),
-  headline3: TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.w500,
-  ),
-  subtitle1: TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-  ),
-  subtitle2: TextStyle(
-    fontSize: 14,
-  ),
-  button: TextStyle(
-    fontSize: 14,
-    fontWeight: FontWeight.w500,
-    letterSpacing: 0.17,
-  ),
-);
-
-final appThemeData = ThemeData(
+).copyWith(
   /// Card Outline
   cardTheme: CardTheme(
     shape: RoundedRectangleBorder(
@@ -38,16 +45,4 @@ final appThemeData = ThemeData(
       ),
     ),
   ),
-
-  /// Color Scheme
-  primaryColor: Color(0xff048fff),
-  primaryColorLight: Color(0xffeff7ff),
-  errorColor: Color.fromRGBO(255, 94, 4, 1),
-  accentColor: Color.fromRGBO(255, 184, 0, 1),
-
-  /// Typography
-  fontFamily: "Roboto",
-  textTheme: appTextTheme,
-  primaryTextTheme: appTextTheme,
-  accentTextTheme: appTextTheme,
 );
