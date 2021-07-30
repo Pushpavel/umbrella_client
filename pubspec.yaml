@@ -39,6 +39,7 @@ dependencies:
   cloud_functions: ^2.0.0
   freezed_annotation:
   flutter_riverpod: ^1.0.0-dev.5
+  flutter_hooks: ^0.18.0
 
 dev_dependencies:
   flutter_test:
