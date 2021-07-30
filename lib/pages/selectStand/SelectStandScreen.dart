@@ -23,7 +23,7 @@ class SelectStandScreen extends HookWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: _StandList(),
+            child: _StandList(selectedStandId: selectedStandId),
           ),
           _ConfirmButtonLayer(
             selectedStandId: selectedStandId,
@@ -35,18 +35,32 @@ class SelectStandScreen extends HookWidget {
 }
 
 class _StandList extends HookWidget {
-  const _StandList({Key? key}) : super(key: key);
+  final ValueNotifier<String?> selectedStandId;
+
+  const _StandList({Key? key, required this.selectedStandId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final standListResult = useMemoizedStreamResult(StandRepo.getStands);
 
     return standListResult.when(
-      (stands) => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          ...stands.map((stand) => StandCard(key: ValueKey(stand.id), stand: stand)),
-        ],
+      (stands) => ValueListenableBuilder(
+        valueListenable: selectedStandId,
+        builder: (__, value, _) => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ...stands.map(
+              (stand) => StandCard(
+                key: ValueKey(stand.id),
+                stand: stand,
+                selected: value == stand.id,
+                onTap: () {
+                  if (value != stand.id) selectedStandId.value = stand.id;
+                },
+              ),
+            ),
+          ],
+        ),
       ),
       error: (err) => ErrorScreen(err: err),
       loading: () => Center(child: CircularProgressIndicator()),
