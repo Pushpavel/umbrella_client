@@ -12,6 +12,8 @@ class SelectStandScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final selectedStandId = useState<String?>(null);
+
     return Scaffold(
       appBar: AppBar(
         leading: CloseButton(),
@@ -23,16 +25,8 @@ class SelectStandScreen extends HookWidget {
             padding: const EdgeInsets.all(8.0),
             child: _StandList(),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: PrimaryButton(
-                label: Text("CONFIRM"),
-                trailing: Icon(Icons.keyboard_arrow_right),
-                onPressed: () {},
-              ),
-            ),
+          _ConfirmButtonLayer(
+            selectedStandId: selectedStandId,
           ),
         ],
       ),
@@ -56,6 +50,36 @@ class _StandList extends HookWidget {
       ),
       error: (err) => ErrorScreen(err: err),
       loading: () => Center(child: CircularProgressIndicator()),
+    );
+  }
+}
+
+class _ConfirmButtonLayer extends StatelessWidget {
+  final ValueNotifier<String?> selectedStandId;
+
+  const _ConfirmButtonLayer({Key? key, required this.selectedStandId}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: selectedStandId,
+      builder: (BuildContext context, value, Widget? child) {
+        if (value != null && child != null)
+          return child;
+        else
+          return Container();
+      },
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: PrimaryButton(
+            label: Text("CONFIRM"),
+            trailing: Icon(Icons.keyboard_arrow_right),
+            onPressed: () {},
+          ),
+        ),
+      ),
     );
   }
 }
