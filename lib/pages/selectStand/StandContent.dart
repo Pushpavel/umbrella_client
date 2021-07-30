@@ -19,7 +19,9 @@ class StandContent extends StatelessWidget {
       minLeadingWidth: 24,
       title: Text(
         stand.name,
-        style: Theme.of(context).textTheme.headline4,
+        style: TextStyle(
+          // color: stand.getStatus() == StandStatus.READY ? Theme.of(context).hintColor : null,
+        ),
       ),
       subtitle: subtitle != null ? Text(subtitle) : null,
     );

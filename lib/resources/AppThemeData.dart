@@ -33,12 +33,12 @@ final appThemeData = ThemeData(
       fontSize: 18,
       fontWeight: FontWeight.w500,
     ),
-    headline4: TextStyle(
-      fontSize: 14,
+    subtitle1: TextStyle(
+      fontSize: 16,
       fontWeight: FontWeight.w500,
     ),
-    subtitle1: TextStyle(
-      fontSize: 10,
+    subtitle2: TextStyle(
+      fontSize: 14,
     ),
     button: TextStyle(
       fontSize: 14,
