@@ -27,7 +27,7 @@ class NavDelegate extends SinglePageRouterDelegate {
         return requestResult.when(
           (request) {
             // user with no request
-            if (request == null) return HomeScreen();
+            if (request == null) return HomeScreen(user: userResult.getOrNull());
 
             // user with request
             switch (request.status) {
