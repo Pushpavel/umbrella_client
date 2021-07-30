@@ -17,13 +17,8 @@ class StandContent extends StatelessWidget {
       leading: Icon(Icons.place),
       horizontalTitleGap: 8,
       minLeadingWidth: 24,
-      title: Text(
-        stand.name,
-        style: TextStyle(
-          // color: stand.getStatus() == StandStatus.READY ? Theme.of(context).hintColor : null,
-        ),
-      ),
-      subtitle: subtitle != null ? Text(subtitle) : null,
+      title: Text(stand.name),
+      subtitle: Text(subtitle),
     );
   }
 }

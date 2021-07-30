@@ -4,7 +4,7 @@ class Strings {
   static const appName = "Umbrella Client";
   static const ownedUmbrellaLine = "You had picked up an umbrella";
 
-  static String? standStatusString(StandStatus status) {
+  static String standStatusString(StandStatus status) {
     switch (status) {
       case StandStatus.BUSY:
         return "stand is busy, Please try after a minute";
@@ -13,7 +13,7 @@ class Strings {
       case StandStatus.OFFLINE:
         return "stand is offline";
       case StandStatus.READY:
-        return null;
+        return "online";
     }
   }
 }
