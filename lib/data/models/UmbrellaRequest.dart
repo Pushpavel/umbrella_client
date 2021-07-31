@@ -30,15 +30,27 @@ class UmbrellaRequest {
   factory UmbrellaRequest.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     if (!snapshot.exists) throw InternalErr();
     final data = snapshot.data()!;
-
     return UmbrellaRequest(
       id: snapshot.id,
       userId: data["userId"],
       requestTime: data["requestTime"].toDate(),
       umbrellaId: data["umbrellaId"],
-      pickup: TimeAndStand(data["pickup.time"]?.toDate(), data["pickup.stand"]),
-      drop: data.containsKey("drop") ? TimeAndStand(data["drop.time"].toDate(), data["drop.stand"]) : null,
-      failure: data.containsKey("failed") ? RequestFailure(data["failed.code"], data["failed.time"].toDate()) : null,
+      pickup: TimeAndStand(
+        data["pickup"]?["time"]?.toDate(),
+        data["pickup"]["stand"],
+      ),
+      drop: data.containsKey("drop")
+          ? TimeAndStand(
+              data["drop"]["time"].toDate(),
+              data["drop"]["stand"],
+            )
+          : null,
+      failure: data.containsKey("failed")
+          ? RequestFailure(
+              data["failed"]["code"],
+              data["failed"]["time"].toDate(),
+            )
+          : null,
     );
   }
 }
