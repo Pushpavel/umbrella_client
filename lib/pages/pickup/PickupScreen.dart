@@ -1,13 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:umbrella_client/pages/pickup/PickupCard.dart';
 import 'package:umbrella_client/resources/Strings.dart';
-import 'package:umbrella_client/widgets/OutlinedCard.dart';
 
 class PickupScreen extends StatelessWidget {
-  const PickupScreen({Key? key}) : super(key: key);
+  final String requestId;
+
+  const PickupScreen({Key? key, required this.requestId}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -40,44 +43,12 @@ class PickupScreen extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: _PickupCard(),
+                PickupCard(
+                  requestId: requestId,
+                  margin: EdgeInsets.all(24),
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _PickupCard extends StatelessWidget {
-  const _PickupCard({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return OutlinedCard(
-      color: Theme.of(context).primaryColor,
-      outlineColor: Theme.of(context).primaryColor,
-      elevation: 0,
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            Text(
-              "Pickup the Umbrella",
-              style: Theme.of(context).primaryTextTheme.headline1,
-            ),
-            Wrap(
-              children: [
-                Icon(Icons.place),
-                Text("data"),
-              ],
-            )
           ],
         ),
       ),

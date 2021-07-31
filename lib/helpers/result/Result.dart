@@ -8,11 +8,11 @@ part 'Result.freezed.dart';
 class Result<T> with _$Result<T> {
   const Result._();
 
-  factory Result(T value) = Success;
+  const factory Result(T value) = Success;
 
-  factory Result.error(Err exception) = Failure;
+  const factory Result.error(Err exception) = Failure;
 
-  factory Result.loading() = Loading;
+  const factory Result.loading() = Loading;
 
   T? getOrNull() {
     return when((value) => value, error: (e) => null, loading: () => null);
