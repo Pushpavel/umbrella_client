@@ -51,7 +51,11 @@ jobs:
         run: flutter pub run build_runner build --delete-conflicting-outputs
 
       - name: Run ${{ matrix.category }}
-        if: matrix.category != 'format'
+        if: matrix.category == 'analyze'
+        run: flutter ${{ matrix.category }} --no-pub --no-fatal-infos
+
+      - name: Run ${{ matrix.category }}
+        if: matrix.category == 'test'
         run: flutter ${{ matrix.category }} --no-pub
 
 
@@ -108,8 +112,8 @@ jobs:
       - name: Run Code Generation
         run: flutter pub run build_runner build --delete-conflicting-outputs
 
-      - name: Build an Android App Bundle file
-        run: flutter build appbundle
+      - name: Build an Android App Bundle file from Development
+        run: flutter build appbundle --no-pub --target="lib\dev.dart"
 
       - name: Upload the aab artifact
         uses: actions/upload-artifact@v2.2.4
