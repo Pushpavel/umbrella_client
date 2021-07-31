@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:umbrella_client/resources/theme/colors.dart';
 import 'package:umbrella_client/resources/theme/typography.dart';
 
-
 final appThemeData = ThemeData(
   /// Card Outline
   cardTheme: CardTheme(

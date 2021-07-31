@@ -5,6 +5,7 @@ final appTextTheme = TextTheme(
   headline1: TextStyle(
     fontSize: 28,
     fontWeight: FontWeight.w700,
+    letterSpacing: 0.32,
   ),
   headline2: TextStyle(
     fontSize: 18,

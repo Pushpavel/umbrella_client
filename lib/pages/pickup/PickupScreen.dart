@@ -41,9 +41,8 @@ class PickupScreen extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: PickupCard(),
+                PickupCard(
+                  margin: EdgeInsets.all(24),
                 ),
               ],
             ),
