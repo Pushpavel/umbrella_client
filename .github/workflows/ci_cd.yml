@@ -113,7 +113,7 @@ jobs:
         run: flutter pub run build_runner build --delete-conflicting-outputs
 
       - name: Build an Android App Bundle file from Development
-        run: flutter build appbundle --no-pub --target="lib\dev.dart"
+        run: flutter build appbundle --no-pub --target="lib/dev.dart"
 
       - name: Upload the aab artifact
         uses: actions/upload-artifact@v2.2.4
