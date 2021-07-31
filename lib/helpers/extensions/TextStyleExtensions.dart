@@ -1,21 +1,12 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:umbrella_client/resources/theme/colors.dart';
 
 extension TextStyleExtensions on TextStyle {
-  highEmphasis() {
-    return copyWith(
-      color: color!.withOpacity(0.87),
-    );
-  }
+  TextStyle highEmphasis() => copyWith(color: this._isDark() ? AppColors.blackHigh : AppColors.whiteHigh);
 
-  mediumEmphasis() {
-    return copyWith(
-      color: color!.withOpacity(0.60),
-    );
-  }
+  TextStyle mediumEmphasis() => copyWith(color: this._isDark() ? AppColors.blackMedium : AppColors.whiteMedium);
 
-  disabledText() {
-    return copyWith(
-      color: color!.withOpacity(0.38),
-    );
-  }
+  TextStyle disabledEmphasis() => copyWith(color: this._isDark() ? AppColors.blackDisabled : AppColors.whiteDisabled);
+
+  bool _isDark() => color != null && ThemeData.estimateBrightnessForColor(color!) == Brightness.dark;
 }

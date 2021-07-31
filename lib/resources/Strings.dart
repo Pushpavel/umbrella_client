@@ -16,4 +16,9 @@ class Strings {
         return "online";
     }
   }
+
+  static const pickupInstructionsTitle = "How to get the umbrella from stand ?";
+  static const pickupInstructionsBody = "1. Make sure your name is displayed on the stands display\n"
+      "2. Gently raise the topmost umbrella till it reaches the scanner\n"
+      "3. get the umbrella out after a second";
 }
