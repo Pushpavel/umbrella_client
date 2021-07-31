@@ -12,6 +12,6 @@ class AppColors {
   static const whiteDisabled = Colors.white38;
 
   static const blackHigh = Colors.black87;
-  static const blackMedium = Color(0xbcffffff); // black60
+  static const blackMedium = Color(0x99000000); // black60
   static const blackDisabled = Colors.black38;
 }
