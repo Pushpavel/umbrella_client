@@ -5,7 +5,9 @@ import 'package:umbrella_client/pages/pickup/PickupCard.dart';
 import 'package:umbrella_client/resources/Strings.dart';
 
 class PickupScreen extends StatelessWidget {
-  const PickupScreen({Key? key}) : super(key: key);
+  final String requestId;
+
+  const PickupScreen({Key? key, required this.requestId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

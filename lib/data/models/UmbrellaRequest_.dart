@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:umbrella_client/helpers/errors/Err.dart';
 
-class UmbrellaRequest {
+@Deprecated("")
+class UmbrellaRequest_ {
   final String id;
   final String userId;
   final Timestamp requestTime;
   final String? umbrellaId;
-
   final String pickupStandId;
   final Timestamp? dropTime;
   final String? dropStandId;
@@ -13,24 +14,25 @@ class UmbrellaRequest {
 
   final _Failure? failure;
 
-  UmbrellaRequest(
-      {this.dropTime,
-      this.pickupTime,
-      this.dropStandId,
-      required this.pickupStandId,
-      required this.id,
-      required this.userId,
-      required this.requestTime,
-      this.umbrellaId,
-      this.failure});
+  UmbrellaRequest_({
+    this.dropTime,
+    this.pickupTime,
+    this.dropStandId,
+    required this.pickupStandId,
+    required this.id,
+    required this.userId,
+    required this.requestTime,
+    this.umbrellaId,
+    this.failure,
+  });
 
-  factory UmbrellaRequest.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+  factory UmbrellaRequest_.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     final data = snapshot.data();
-    if (data == null) throw Exception("Internal Error");
+    if (data == null) throw InternalErr();
 
     final failure = data.containsKey("failure") ? _Failure(data["failure.reason"], data["failure.time"]) : null;
 
-    return UmbrellaRequest(
+    return UmbrellaRequest_(
         dropTime: data["drop.time"],
         pickupTime: data["pickup.time"],
         pickupStandId: data["pickup.stand"],
