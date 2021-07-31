@@ -32,7 +32,7 @@ final appWhiteTexts = Typography.whiteMountainView.copyWith(
   headline1: TextStyle(color: AppColors.whiteHigh),
   headline2: TextStyle(color: AppColors.whiteHigh),
   headline3: TextStyle(color: AppColors.whiteHigh),
-  subtitle1: TextStyle(color: AppColors.blackHigh),
+  subtitle1: TextStyle(color: AppColors.whiteMedium),
   subtitle2: TextStyle(color: AppColors.whiteMedium),
 );
 
@@ -40,6 +40,6 @@ final appBlackTexts = Typography.blackMountainView.copyWith(
   headline1: TextStyle(color: AppColors.blackHigh),
   headline2: TextStyle(color: AppColors.blackHigh),
   headline3: TextStyle(color: AppColors.blackHigh),
-  subtitle1: TextStyle(color: AppColors.blackHigh),
+  subtitle1: TextStyle(color: AppColors.blackMedium),
   subtitle2: TextStyle(color: AppColors.blackMedium),
 );
