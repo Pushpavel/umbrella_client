@@ -20,6 +20,13 @@ class UmbrellaRequest {
     this.failure,
   });
 
+  get status {
+    if (failure != null) return RequestStatus.FAILED;
+    if (drop != null) return RequestStatus.SUCCESS;
+    if (umbrellaId != null) return RequestStatus.DROP;
+    return RequestStatus.PICK_UP;
+  }
+
   factory UmbrellaRequest.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     if (!snapshot.exists) throw InternalErr();
     final data = snapshot.data()!;
@@ -49,3 +56,5 @@ class RequestFailure {
 
   RequestFailure(this.code, this.time);
 }
+
+enum RequestStatus { PICK_UP, DROP, FAILED, SUCCESS }
