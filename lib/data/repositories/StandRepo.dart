@@ -13,5 +13,13 @@ class StandRepo {
     );
   }
 
+  static Stream<Stand?> getStand(String standId) {
+    return FirebaseFirestore.instance
+        .collection("Stands")
+        .doc(standId)
+        .snapshots()
+        .map((snap) => Stand.fromFirestore(snap));
+  }
+
   StandRepo._();
 }

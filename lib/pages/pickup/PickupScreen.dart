@@ -10,7 +10,7 @@ class PickupScreen extends StatelessWidget {
   const PickupScreen({Key? key, required this.requestId}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -44,6 +44,7 @@ class PickupScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 PickupCard(
+                  requestId: requestId,
                   margin: EdgeInsets.all(24),
                 ),
               ],

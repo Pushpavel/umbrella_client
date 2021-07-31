@@ -1,9 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:umbrella_client/data/models/Stand.dart';
 import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
 import 'package:umbrella_client/data/models/UmbrellaRequest_.dart';
 import 'package:umbrella_client/data/repositories/AuthRepo.dart';
 import 'package:umbrella_client/data/repositories/RequestRepo.dart';
+import 'package:umbrella_client/data/repositories/StandRepo.dart';
 import 'package:umbrella_client/data/repositories/UmbrellaRepo.dart';
 import 'package:umbrella_client/helpers/extensions/providerExtensions.dart';
 import 'package:umbrella_client/utils/lang-utils.dart';
@@ -17,6 +19,8 @@ final currentRequestIdProvider = StreamProvider<String?>((ref) {
 final requestProvider = StreamProvider.family<UmbrellaRequest?, String>((ref, requestId) {
   return RequestRepo.getUmbrellaRequest(requestId);
 });
+
+final standProvider = StreamProvider.family<Stand?, String>((ref, standId) => StandRepo.getStand(standId));
 
 @Deprecated("use currentRequestProvider")
 final currentUmbrellaRequestProvider = StreamProvider<UmbrellaRequest_?>((ref) {
