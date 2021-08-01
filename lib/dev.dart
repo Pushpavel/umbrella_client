@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:umbrella_client/pages/selectStand/SelectStandScreen.dart';
+import 'package:umbrella_client/pages/auth/LoginScreen.dart';
 import 'package:umbrella_client/resources/theme/AppThemeData.dart';
 
 void main() async {
@@ -13,7 +13,7 @@ void main() async {
     ProviderScope(
       child: MaterialApp(
         theme: appThemeData,
-        home: SelectStandScreen(),
+        home: LoginScreen(),
       ),
     ),
   );
