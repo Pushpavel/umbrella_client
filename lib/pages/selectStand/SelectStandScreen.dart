@@ -12,8 +12,8 @@ class SelectStandScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedStandId = useState<String?>(null);
-
+    final selectedStandIdNotifier = useState<String?>(null);
+    final confirmingNotifier = useState(false);
     return Scaffold(
       appBar: AppBar(
         leading: CloseButton(),
@@ -23,10 +23,14 @@ class SelectStandScreen extends HookWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: _StandList(selectedStandId: selectedStandId),
+            child: _StandList(
+              selectedStandIdNotifier: selectedStandIdNotifier,
+              confirmingNotifier: confirmingNotifier,
+            ),
           ),
           _ConfirmButtonLayer(
-            selectedStandId: selectedStandId,
+            selectedStandIdNotifier: selectedStandIdNotifier,
+            confirmingNotifier: confirmingNotifier,
           ),
         ],
       ),
@@ -35,18 +39,24 @@ class SelectStandScreen extends HookWidget {
 }
 
 class _StandList extends HookWidget {
-  final ValueNotifier<String?> selectedStandId;
+  final ValueNotifier<String?> selectedStandIdNotifier;
+  final ValueNotifier<bool> confirmingNotifier;
 
-  const _StandList({Key? key, required this.selectedStandId}) : super(key: key);
+  const _StandList({
+    Key? key,
+    required this.selectedStandIdNotifier,
+    required this.confirmingNotifier,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final standListResult = useMemoizedStreamResult(StandRepo.getStands);
 
     return standListResult.when(
-      (stands) => Builder(
+      (stands) => HookBuilder(
         builder: (BuildContext context) {
-          final _selectedStandId = useListenable(selectedStandId);
+          final selectedStandId = useValueListenable(selectedStandIdNotifier);
+          final confirming = useValueListenable(confirmingNotifier);
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -55,9 +65,9 @@ class _StandList extends HookWidget {
                 (stand) => StandCard(
                   key: ValueKey(stand.id),
                   stand: stand,
-                  selected: _selectedStandId == stand.id,
+                  selected: selectedStandId == stand.id,
                   onTap: () {
-                    if (_selectedStandId != stand.id) selectedStandId.value = stand.id;
+                    if (selectedStandId != stand.id && !confirming) selectedStandIdNotifier.value = stand.id;
                   },
                 ),
               ),
@@ -72,23 +82,44 @@ class _StandList extends HookWidget {
 }
 
 class _ConfirmButtonLayer extends HookWidget {
-  final ValueNotifier<String?> selectedStandId;
+  final ValueNotifier<String?> selectedStandIdNotifier;
+  final ValueNotifier<bool> confirmingNotifier;
 
-  const _ConfirmButtonLayer({Key? key, required this.selectedStandId}) : super(key: key);
+  const _ConfirmButtonLayer({
+    Key? key,
+    required this.selectedStandIdNotifier,
+    required this.confirmingNotifier,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _selectedStandId = useValueListenable(selectedStandId);
-    if (_selectedStandId == null) return SizedBox();
+    final selectedStandId = useValueListenable(selectedStandIdNotifier);
+    final confirming = useValueListenable(confirmingNotifier);
+    if (selectedStandId == null) return SizedBox();
 
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
         padding: const EdgeInsets.all(24),
-        child: PrimaryButton(
-          label: Text("CONFIRM"),
-          trailing: Icon(Icons.keyboard_arrow_right),
-          onPressed: () {},
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 8,
+          children: [
+            PrimaryButton(
+              label: Text("CONFIRM"),
+              disabled: confirming,
+              trailing: Icon(Icons.keyboard_arrow_right),
+              onPressed: () {
+                confirmingNotifier.value = true;
+              },
+            ),
+            if (confirming)
+              SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+          ],
         ),
       ),
     );
