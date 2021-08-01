@@ -44,23 +44,26 @@ class _StandList extends HookWidget {
     final standListResult = useMemoizedStreamResult(StandRepo.getStands);
 
     return standListResult.when(
-      (stands) => ValueListenableBuilder(
-        valueListenable: selectedStandId,
-        builder: (__, value, _) => Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ...stands.map(
-              (stand) => StandCard(
-                key: ValueKey(stand.id),
-                stand: stand,
-                selected: value == stand.id,
-                onTap: () {
-                  if (value != stand.id) selectedStandId.value = stand.id;
-                },
+      (stands) => Builder(
+        builder: (BuildContext context) {
+          final _selectedStandId = useListenable(selectedStandId);
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ...stands.map(
+                (stand) => StandCard(
+                  key: ValueKey(stand.id),
+                  stand: stand,
+                  selected: _selectedStandId == stand.id,
+                  onTap: () {
+                    if (_selectedStandId != stand.id) selectedStandId.value = stand.id;
+                  },
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          );
+        },
       ),
       error: (err) => ErrorScreen(err: err),
       loading: () => Center(child: CircularProgressIndicator()),
@@ -68,30 +71,24 @@ class _StandList extends HookWidget {
   }
 }
 
-class _ConfirmButtonLayer extends StatelessWidget {
+class _ConfirmButtonLayer extends HookWidget {
   final ValueNotifier<String?> selectedStandId;
 
   const _ConfirmButtonLayer({Key? key, required this.selectedStandId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: selectedStandId,
-      builder: (BuildContext context, value, Widget? child) {
-        if (value != null && child != null)
-          return child;
-        else
-          return Container();
-      },
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: PrimaryButton(
-            label: Text("CONFIRM"),
-            trailing: Icon(Icons.keyboard_arrow_right),
-            onPressed: () {},
-          ),
+    final _selectedStandId = useValueListenable(selectedStandId);
+    if (_selectedStandId == null) return SizedBox();
+
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: PrimaryButton(
+          label: Text("CONFIRM"),
+          trailing: Icon(Icons.keyboard_arrow_right),
+          onPressed: () {},
         ),
       ),
     );
