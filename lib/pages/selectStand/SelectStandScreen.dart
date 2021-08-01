@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:umbrella_client/data/repositories/RequestRepo.dart';
 import 'package:umbrella_client/data/repositories/StandRepo.dart';
 import 'package:umbrella_client/helpers/hooks/useMemoizedStreamResult.dart';
 import 'package:umbrella_client/pages/ErrorScreen.dart';
 import 'package:umbrella_client/pages/selectStand/StandCard.dart';
+import 'package:umbrella_client/resources/AppScreens.dart';
 import 'package:umbrella_client/widgets/PrimaryButton.dart';
 
 class SelectStandScreen extends HookWidget {
@@ -109,8 +112,16 @@ class _ConfirmButtonLayer extends HookWidget {
               label: Text("CONFIRM"),
               disabled: confirming,
               trailing: Icon(Icons.keyboard_arrow_right),
-              onPressed: () {
+              onPressed: () async {
                 confirmingNotifier.value = true;
+                final success = await RequestRepo.requestUmbrellaPickup(selectedStandId);
+                if (!success) {
+                  confirmingNotifier.value = false;
+                  Fluttertoast.showToast(msg: "Request Failed");
+                  return;
+                }
+
+                await Navigator.pushAndRemoveUntil(context, AppScreens.homeScreen(), (route) => false);
               },
             ),
             if (confirming)
