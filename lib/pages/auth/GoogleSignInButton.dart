@@ -5,10 +5,12 @@ import 'package:umbrella_client/resources/theme/colors.dart';
 
 class GoogleSignInButton extends StatelessWidget {
   final VoidCallback? onPressed;
+  final bool disabled;
 
   const GoogleSignInButton({
     Key? key,
-    required this.onPressed,
+    this.onPressed,
+    this.disabled = false,
   }) : super(key: key);
 
   @override
@@ -16,12 +18,12 @@ class GoogleSignInButton extends StatelessWidget {
     final borderRadius = BorderRadius.all(Radius.circular(2));
 
     return Card(
-      color: AppColors.googleBlue,
+      color: disabled ? AppColors.googleBlue.withOpacity(0.4) : AppColors.googleBlue,
       shape: RoundedRectangleBorder(borderRadius: borderRadius),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: onPressed,
-        splashFactory: InkRipple.splashFactory,
+        onTap: disabled ? null : onPressed,
+        splashFactory: disabled ? NoSplash.splashFactory : InkRipple.splashFactory,
         child: Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
           spacing: 8,

@@ -14,32 +14,6 @@ class LoginScreen extends HookConsumerWidget {
 
   @override
   Widget build(context, ref) {
-    final userResult = ref.watch(authProvider).asResult();
-
-    Widget content;
-    if (userResult is Success<UmbrellaUser?>) {
-      if (userResult.value == null)
-        content = GoogleSignInButton(onPressed: () async {
-          try {
-            // TODO: start loading
-            await AuthRepo.signInWithGoogle();
-          } catch (e) {
-            if (e is FirebaseAuthException) {
-              // TODO: toast signIn error
-            } else {
-              // TODO: toast Internal Error
-            }
-          } finally {
-            // TODO: stop loading
-          }
-        });
-      else {
-        // TODO: navigate to splash screen and toast
-        content = Text("Successfully SignedIn as ${userResult.value!.name}");
-      }
-    } else
-      content = CircularProgressIndicator();
-
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -51,7 +25,7 @@ class LoginScreen extends HookConsumerWidget {
               SizedBox(height: 32),
               Text("Umbrella Login", style: Theme.of(context).textTheme.headline1),
               SizedBox(height: 72),
-              content,
+              _AuthSection(),
             ],
           ),
         ),
@@ -60,3 +34,41 @@ class LoginScreen extends HookConsumerWidget {
   }
 }
 
+class _AuthSection extends HookConsumerWidget {
+  const _AuthSection({Key? key}) : super(key: key);
+
+  @override
+  Widget build(context, ref) {
+    final userResult = ref.watch(authProvider).asResult();
+
+    if (userResult is! Success<UmbrellaUser?>) return CircularProgressIndicator();
+
+    if (userResult.value != null) {
+      // TODO: navigate to splash screen and toast
+      return Text("Successfully SignedIn as ${userResult.value!.name}");
+    }
+
+    bool signingIn = false;
+    print("Building");
+    return StatefulBuilder(
+      builder: (context, setState) {
+        if (signingIn == true) return GoogleSignInButton(disabled: true);
+
+        return GoogleSignInButton(onPressed: () async {
+          try {
+            setState(() => signingIn = true);
+            await AuthRepo.signInWithGoogle();
+          } catch (e) {
+            if (e is FirebaseAuthException) {
+              // TODO: toast signIn error
+            } else {
+              // TODO: toast Internal Error
+            }
+          } finally {
+            setState(() => signingIn = false);
+          }
+        });
+      },
+    );
+  }
+}
