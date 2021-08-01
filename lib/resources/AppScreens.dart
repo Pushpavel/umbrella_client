@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:umbrella_client/pages/HomeScreen.dart';
-import 'package:umbrella_client/pages/LoginScreen.dart';
+import 'package:umbrella_client/pages/auth/LoginScreen.dart';
 import 'package:umbrella_client/pages/selectStand/SelectStandScreen.dart';
 
 class AppScreens {

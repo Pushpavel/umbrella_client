@@ -43,18 +43,19 @@ class _AuthSection extends HookConsumerWidget {
   Widget build(context, ref) {
     final userResult = ref.watch(authProvider).asResult();
 
+    bool signingIn = false;
+
     if (userResult is! Success<UmbrellaUser?>) return CircularProgressIndicator();
 
     if (userResult.value != null) {
-      Fluttertoast.showToast(msg: "Successfully signed in");
-
       // navigate signed In user to home screen
-      Navigator.of(context).pushAndRemoveUntil(AppScreens.homeScreen(), (route) => false);
+      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+        Fluttertoast.showToast(msg: "Successfully signed in");
+        await Navigator.of(context).pushAndRemoveUntil(AppScreens.homeScreen(), (route) => false);
+      });
 
       return CircularProgressIndicator();
     }
-
-    bool signingIn = false;
 
     return StatefulBuilder(
       builder: (context, setState) {
