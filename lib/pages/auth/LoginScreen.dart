@@ -62,22 +62,36 @@ class _AuthSection extends HookConsumerWidget {
 
     return StatefulBuilder(
       builder: (context, setState) {
-        if (signingIn == true) return GoogleSignInButton(disabled: true);
+        if (signingIn == true)
+          return Wrap(
+            spacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              GoogleSignInButton(disabled: true),
+              SizedBox(
+                height: 16,
+                width: 16,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            ],
+          );
 
-        return GoogleSignInButton(onPressed: () async {
-          try {
-            setState(() => signingIn = true);
-            await AuthRepo.signInWithGoogle();
-          } catch (e) {
-            if (e is FirebaseAuthException) {
-              // TODO: toast signIn error
-            } else {
-              // TODO: toast Internal Error
+        return GoogleSignInButton(
+          onPressed: () async {
+            try {
+              setState(() => signingIn = true);
+              await AuthRepo.signInWithGoogle();
+            } catch (e) {
+              if (e is FirebaseAuthException) {
+                // TODO: toast signIn error
+              } else {
+                // TODO: toast Internal Error
+              }
+            } finally {
+              setState(() => signingIn = false);
             }
-          } finally {
-            setState(() => signingIn = false);
-          }
-        });
+          },
+        );
       },
     );
   }
