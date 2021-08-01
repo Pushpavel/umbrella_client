@@ -16,4 +16,6 @@ class AppColors {
   static const blackHigh = Colors.black87;
   static const blackMedium = Color(0x99000000); // black60
   static const blackDisabled = Colors.black38;
+
+  static const googleBlue = Color(0xff346ef1);
 }
