@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
 
 class RequestRepo {
@@ -13,5 +14,12 @@ class RequestRepo {
         return UmbrellaRequest.fromFirestore(snap);
       },
     );
+  }
+
+  static Future<bool> requestUmbrellaPickup(String standId) async {
+    final request = FirebaseFunctions.instanceFor(region: "asia-south1").httpsCallable("requestUmbrellaPickup");
+    final result = await request({"standId": standId});
+    // TODO: handle failure states
+    return result.data["success"] != null;
   }
 }

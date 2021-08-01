@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:umbrella_client/data/models/UmbrellaUser.dart';
 import 'package:umbrella_client/data/providers/root.dart';
 import 'package:umbrella_client/data/repositories/AuthRepo.dart';
 import 'package:umbrella_client/helpers/extensions/providerExtensions.dart';
 import 'package:umbrella_client/helpers/result/Result.dart';
-import 'package:umbrella_client/widgets/PrimaryButton.dart';
+import 'package:umbrella_client/resources/AppScreens.dart';
 
 import 'GoogleSignInButton.dart';
 
@@ -42,23 +43,19 @@ class _AuthSection extends HookConsumerWidget {
   Widget build(context, ref) {
     final userResult = ref.watch(authProvider).asResult();
 
+    bool signingIn = false;
+
     if (userResult is! Success<UmbrellaUser?>) return CircularProgressIndicator();
 
     if (userResult.value != null) {
-      // TODO: navigate to splash screen and toast
-      return Column(
-        children: [
-          Text("Successfully SignedIn as ${userResult.value!.name}"),
-          SizedBox(height: 16),
-          PrimaryButton(
-            label: Text("Sign Out"),
-            onPressed: () => AuthRepo.signOut(),
-          ),
-        ],
-      );
-    }
+      // navigate signed In user to home screen
+      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+        Fluttertoast.showToast(msg: "Successfully signed in");
+        await Navigator.of(context).pushAndRemoveUntil(AppScreens.homeScreen(), (route) => false);
+      });
 
-    bool signingIn = false;
+      return CircularProgressIndicator();
+    }
 
     return StatefulBuilder(
       builder: (context, setState) {
@@ -81,11 +78,13 @@ class _AuthSection extends HookConsumerWidget {
             try {
               setState(() => signingIn = true);
               await AuthRepo.signInWithGoogle();
-            } catch (e) {
+            } catch (e, stacktrace) {
               if (e is FirebaseAuthException) {
-                // TODO: toast signIn error
+                Fluttertoast.showToast(msg: e.message ?? "Unknown Authentication Error");
               } else {
-                // TODO: toast Internal Error
+                print(e);
+                print(stacktrace);
+                Fluttertoast.showToast(msg: "Internal Error");
               }
             } finally {
               setState(() => signingIn = false);
