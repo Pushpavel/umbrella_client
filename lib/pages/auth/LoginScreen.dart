@@ -6,6 +6,7 @@ import 'package:umbrella_client/data/providers/root.dart';
 import 'package:umbrella_client/data/repositories/AuthRepo.dart';
 import 'package:umbrella_client/helpers/extensions/providerExtensions.dart';
 import 'package:umbrella_client/helpers/result/Result.dart';
+import 'package:umbrella_client/widgets/PrimaryButton.dart';
 
 import 'GoogleSignInButton.dart';
 
@@ -45,11 +46,20 @@ class _AuthSection extends HookConsumerWidget {
 
     if (userResult.value != null) {
       // TODO: navigate to splash screen and toast
-      return Text("Successfully SignedIn as ${userResult.value!.name}");
+      return Column(
+        children: [
+          Text("Successfully SignedIn as ${userResult.value!.name}"),
+          SizedBox(height: 16),
+          PrimaryButton(
+            label: Text("Sign Out"),
+            onPressed: () => AuthRepo.signOut(),
+          ),
+        ],
+      );
     }
 
     bool signingIn = false;
-    print("Building");
+
     return StatefulBuilder(
       builder: (context, setState) {
         if (signingIn == true) return GoogleSignInButton(disabled: true);

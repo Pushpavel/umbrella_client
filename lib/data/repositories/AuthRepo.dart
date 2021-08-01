@@ -49,5 +49,9 @@ class AuthRepo {
     });
   }
 
+  static Future<void> signOut() {
+    return FirebaseAuth.instance.signOut();
+  }
+
   AuthRepo._();
 }
