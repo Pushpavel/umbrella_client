@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:umbrella_client/data/models/Stand.dart';
+import 'package:umbrella_client/data/repositories/AuthRepo.dart';
 import 'package:umbrella_client/data/repositories/UmbrellaRepo.dart';
 import 'package:umbrella_client/data/services/HomeScreenViewModel.dart';
 import 'package:umbrella_client/data/services/StandService.dart';
@@ -42,6 +43,12 @@ class _HomeScreenView extends StatelessWidget {
             children: [
               SelectedStandCard(
                 selectedStandId$: model.selectedStandId$,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  AuthRepo.signOut();
+                },
+                child: Text("Sign Out"),
               ),
               Container(
                 padding: EdgeInsets.all(32),
