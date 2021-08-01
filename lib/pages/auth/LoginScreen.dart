@@ -17,6 +17,8 @@ class LoginScreen extends StatelessWidget {
             children: [
               FlutterLogo(size: 72),
               SizedBox(height: 32),
+              Text("Umbrella Login", style: Theme.of(context).textTheme.headline1),
+              SizedBox(height: 72),
               GoogleSignInButton(
                 onPressed: () {},
               )
