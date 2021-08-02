@@ -29,16 +29,16 @@ class _HomeScreenView extends StatelessWidget {
   final isLoading = ValueNotifier(false);
 
   Widget getStatusCard(UmbrellaRequest currentRequest) {
-    if (currentRequest.dropTime != null) {
+    if (currentRequest.drop != null) {
       return RecentDropCard(
         recentRequest: currentRequest,
       );
-    } else if (currentRequest.pickupTime != null) {
+    } else if (currentRequest.pickup != null) {
       return RecentPickupCard(
         recentRequest: currentRequest,
       );
     } else {
-      return RecentRequestCard(locationId: currentRequest.pickupStandId);
+      return RecentRequestCard(locationId: currentRequest.pickup.standId);
     }
   }
 

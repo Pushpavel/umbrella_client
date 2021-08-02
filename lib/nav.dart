@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
+import 'package:umbrella_client/data/models/UmbrellaRequest_.dart';
 import 'package:umbrella_client/data/providers/root.dart';
 import 'package:umbrella_client/helpers/errors/Err.dart';
 import 'package:umbrella_client/helpers/extensions/providerExtensions.dart';
