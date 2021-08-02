@@ -1,32 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:umbrella_client/data/models/Stand.dart';
+import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
 import 'package:umbrella_client/data/models/UmbrellaUser.dart';
-import 'package:umbrella_client/data/repositories/UmbrellaRepo.dart';
-import 'package:umbrella_client/data/services/HomeScreenViewModel.dart';
-import 'package:umbrella_client/data/services/StandService.dart';
-import 'package:umbrella_client/helpers/DisposableProvider.dart';
-import 'package:umbrella_client/helpers/extensions/ContextExtensions.dart';
+import 'package:umbrella_client/data/providers/root.dart';
 import 'package:umbrella_client/widgets/Home/ProfileTopbar.dart';
 import 'package:umbrella_client/widgets/Home/RecentDropCard.dart';
 import 'package:umbrella_client/widgets/Home/RecentPickupCard.dart';
 import 'package:umbrella_client/widgets/Home/RecentRequestCard.dart';
-import 'package:umbrella_client/widgets/SelectedStandCard.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:umbrella_client/widgets/PrimaryButton.dart';
+import 'package:umbrella_client/helpers/extensions/providerExtensions.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:umbrella_client/helpers/errors/Err.dart';
 
 class HomeScreen extends StatelessWidget {
   final UmbrellaUser? user;
   HomeScreen({Key? key, required this.user}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        DisposableProvider(create: (_) => StandService()),
-        DisposableProvider(create: (context) => HomeScreenViewModel(context))
-      ],
-      child: _HomeScreenView(
-        user: user,
-      ),
+    return _HomeScreenView(
+      user: user,
     );
   }
 }
@@ -37,80 +28,87 @@ class _HomeScreenView extends StatelessWidget {
 
   final isLoading = ValueNotifier(false);
 
+  Widget getStatusCard(UmbrellaRequest currentRequest) {
+    if (currentRequest.dropTime != null) {
+      return RecentDropCard(
+        recentRequest: currentRequest,
+      );
+    } else if (currentRequest.pickupTime != null) {
+      return RecentPickupCard(
+        recentRequest: currentRequest,
+      );
+    } else {
+      return RecentRequestCard(locationId: currentRequest.pickupStandId);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final model = context.get<HomeScreenViewModel>();
+    /*  final model = context.get<HomeScreenViewModel>();
     final standService = context.get<StandService>();
+ */
+    print("object");
 
     return SafeArea(
       child: Scaffold(
         body: ValueListenableBuilder<bool>(
-          valueListenable: isLoading,
-          builder: (context, loading, _) {
-            if (loading) return Center(child: CircularProgressIndicator());
-            return Column(
-              children: [
-                Expanded(
-                  child: Stack(alignment: Alignment.center, children: [
-                    SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            ProfileTopbar(profilePic: user?.auth.photoURL, username: user!.name),
-                            SizedBox(
-                              height: 48,
-                            ),
-                            RecentDropCard(
-                              recentRequest: null,
-                            ),
-                            RecentPickupCard(
-                              recentRequest: null,
-                            ),
-                            RecentRequestCard(location: "Boys Hostel"),
-                            SizedBox(
-                              height: 48,
-                            ),
-                          ],
-                        ),
+            valueListenable: isLoading,
+            builder: (context, loading, _) {
+              if (loading) return Center(child: CircularProgressIndicator());
+
+              try {
+                return Stack(alignment: Alignment.center, fit: StackFit.expand, children: [
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          ProfileTopbar(profilePic: user?.auth.photoURL, username: user!.name),
+                          SizedBox(
+                            height: 48,
+                          ),
+                          Consumer(
+                            builder: (context, ref, child) {
+                              UmbrellaRequest? currentRequest =
+                                  null; //ref.watch(currentUmbrellaRequestProvider).asResult().getOrNull();
+                              print(currentRequest.toString());
+                              if (currentRequest == null)
+                                return Container(
+                                  child: Center(
+                                    child: Text("No requests"),
+                                  ),
+                                );
+                              return getStatusCard(currentRequest);
+                            },
+                          ),
+                          SizedBox(
+                            height: 48,
+                          ),
+                        ],
                       ),
                     ),
-                    Positioned(
-                      bottom: 0,
-                      child: Container(
-                        margin: EdgeInsets.all(16),
-                        child: StreamBuilder<Stand?>(
-                            stream: model.selectedStandId$.switchMap((standId) => standService.getStand(standId)),
-                            builder: (context, snapshot) {
-                              final enabled = snapshot.data?.requestId == null;
-                              return FloatingActionButton.extended(
-                                icon: Icon(Icons.umbrella),
-                                label: Text("REQUEST UMBRELLA"),
-                                onPressed: enabled
-                                    ? () async {
-                                        final selectedStandId = model.selectedStandId$.value;
-                                        isLoading.value = true;
-                                        final success = await UmbrellaRepo.requestUmbrellaPickup(selectedStandId);
-                                        if (!success) {
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(content: Text("Request Failed")),
-                                          );
-                                          isLoading.value = false;
-                                        }
-                                      }
-                                    : null,
-                              );
-                            }),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    child: Container(
+                      margin: EdgeInsets.all(16),
+                      child: PrimaryButton(
+                        label: Text("GRAB AN UMBRELLA"),
+                        onPressed: () => null,
+                        trailing: Icon(Icons.keyboard_arrow_right),
                       ),
-                    )
-                  ]),
-                ),
-              ],
-            );
-          },
-        ),
+                    ),
+                  )
+                ]);
+              } on LoadingErr {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }),
       ),
     );
   }

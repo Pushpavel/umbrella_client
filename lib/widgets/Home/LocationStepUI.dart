@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class LocationStep extends StatelessWidget {
-  final String location, time;
+  final String location;
+  final Timestamp? time;
   const LocationStep(this.location, this.time, {Key? key}) : super(key: key);
 
   @override
@@ -32,7 +35,7 @@ class LocationStep extends StatelessWidget {
               height: 4,
             ),
             Text(
-              time,
+              timeago.format(DateTime.fromMillisecondsSinceEpoch(time!.millisecondsSinceEpoch)),
               style: TextStyle(
                 color: Color.fromRGBO(255, 255, 255, 0.6),
                 fontSize: 14,
