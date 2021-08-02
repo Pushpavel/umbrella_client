@@ -111,6 +111,5 @@ Stream<int?> _timeoutStream(DateTime start) async* {
     await Future.delayed(Duration(seconds: 1));
     time = DateTime.now().difference(start);
   }
-
   yield null;
 }

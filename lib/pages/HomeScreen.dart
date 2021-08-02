@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
 import 'package:umbrella_client/data/models/UmbrellaUser.dart';
 import 'package:umbrella_client/data/providers/root.dart';
@@ -12,19 +13,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:umbrella_client/helpers/errors/Err.dart';
 
 class HomeScreen extends StatelessWidget {
-  final UmbrellaUser? user;
-  HomeScreen({Key? key, required this.user}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return _HomeScreenView(
-      user: user,
-    );
+    return _HomeScreenView();
   }
 }
 
-class _HomeScreenView extends StatelessWidget {
-  final UmbrellaUser? user;
-  _HomeScreenView({Key? key, required this.user}) : super(key: key);
+class _HomeScreenView extends HookConsumerWidget {
+  _HomeScreenView({
+    Key? key,
+  }) : super(key: key);
 
   final isLoading = ValueNotifier(false);
 
@@ -33,21 +32,28 @@ class _HomeScreenView extends StatelessWidget {
       return RecentDropCard(
         recentRequest: currentRequest,
       );
-    } else if (currentRequest.pickup != null) {
+    } else if (currentRequest.pickup.time != null) {
       return RecentPickupCard(
         recentRequest: currentRequest,
       );
     } else {
-      return RecentRequestCard(locationId: currentRequest.pickup.standId);
+      return RecentRequestCard(
+        locationId: currentRequest.pickup.standId,
+        requestTimeout: currentRequest.requestTime,
+      );
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    /*  final model = context.get<HomeScreenViewModel>();
-    final standService = context.get<StandService>();
- */
-    print("object");
+  Widget build(BuildContext context, ref) {
+    final requestId = ref.watch(currentRequestIdProvider).asResult().getOrNull();
+
+    if (requestId == null)
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+
+    UmbrellaRequest? currentRequest = ref.watch(requestProvider("6iU7y7hFzEapmgNHyC1k")).asResult().getOrNull();
 
     return SafeArea(
       child: Scaffold(
@@ -66,24 +72,18 @@ class _HomeScreenView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          ProfileTopbar(profilePic: user?.auth.photoURL, username: user!.name),
+                          ProfileTopbar(),
                           SizedBox(
                             height: 48,
                           ),
-                          Consumer(
-                            builder: (context, ref, child) {
-                              UmbrellaRequest? currentRequest =
-                                  null; //ref.watch(currentUmbrellaRequestProvider).asResult().getOrNull();
-                              print(currentRequest.toString());
-                              if (currentRequest == null)
-                                return Container(
-                                  child: Center(
-                                    child: Text("No requests"),
-                                  ),
-                                );
-                              return getStatusCard(currentRequest);
-                            },
-                          ),
+                          if (currentRequest == null)
+                            Container(
+                              child: Center(
+                                child: Text("No requests"),
+                              ),
+                            )
+                          else
+                            getStatusCard(currentRequest),
                           SizedBox(
                             height: 48,
                           ),

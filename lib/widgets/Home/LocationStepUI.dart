@@ -4,7 +4,7 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class LocationStep extends StatelessWidget {
   final String location;
-  final Timestamp? time;
+  final int? time;
   const LocationStep(this.location, this.time, {Key? key}) : super(key: key);
 
   @override
@@ -35,7 +35,7 @@ class LocationStep extends StatelessWidget {
               height: 4,
             ),
             Text(
-              timeago.format(DateTime.fromMillisecondsSinceEpoch(time!.millisecondsSinceEpoch)),
+              timeago.format(DateTime.fromMillisecondsSinceEpoch(time!)),
               style: TextStyle(
                 color: Color.fromRGBO(255, 255, 255, 0.6),
                 fontSize: 14,
