@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:umbrella_client/helpers/extensions/providerExtensions.dart';
 import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
 import 'package:umbrella_client/data/providers/root.dart';
-import 'package:umbrella_client/pages/pickup/PickupCard.dart';
-import 'package:umbrella_client/widgets/Home/LocationStepUI.dart';
+import 'package:umbrella_client/pages/home/LocationStepUI.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RecentPickupCard extends StatelessWidget {

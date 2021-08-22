@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:umbrella_client/pages/HomeScreen.dart';
+import 'package:umbrella_client/pages/home/HomeScreen.dart';
 import 'package:umbrella_client/pages/auth/LoginScreen.dart';
 import 'package:umbrella_client/pages/auth/ProfileScreen.dart';
 import 'package:umbrella_client/pages/selectStand/SelectStandScreen.dart';

@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
-import 'package:umbrella_client/data/models/UmbrellaUser.dart';
 import 'package:umbrella_client/data/providers/root.dart';
-import 'package:umbrella_client/widgets/Home/ProfileTopbar.dart';
-import 'package:umbrella_client/widgets/Home/RecentDropCard.dart';
-import 'package:umbrella_client/widgets/Home/RecentPickupCard.dart';
-import 'package:umbrella_client/widgets/Home/RecentRequestCard.dart';
+import 'package:umbrella_client/pages/home/ProfileTopbar.dart';
+import 'package:umbrella_client/pages/home/RecentDropCard.dart';
+import 'package:umbrella_client/pages/home/RecentPickupCard.dart';
+import 'package:umbrella_client/pages/home/RecentRequestCard.dart';
 import 'package:umbrella_client/widgets/PrimaryButton.dart';
 import 'package:umbrella_client/helpers/extensions/providerExtensions.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:umbrella_client/helpers/errors/Err.dart';
 
 class HomeScreen extends StatelessWidget {
