@@ -6,6 +6,7 @@ import 'package:umbrella_client/data/repositories/RequestRepo.dart';
 import 'package:umbrella_client/helpers/hooks/useMemoizedStreamResult.dart';
 import 'package:umbrella_client/helpers/result/Result.dart';
 import 'package:umbrella_client/pages/ErrorScreen.dart';
+import 'package:umbrella_client/pages/home/FailedRequestCard.dart';
 import 'package:umbrella_client/pages/home/ProfileTopbar.dart';
 import 'package:umbrella_client/pages/home/RecentDropCard.dart';
 import 'package:umbrella_client/pages/home/RecentPickupCard.dart';
@@ -57,6 +58,8 @@ class _HomeScreenView extends HookConsumerWidget {
                     (currentRequest) {
                       if (currentRequest == null)
                         return Center(child: Text("No Requests"));
+                      else if (currentRequest.failure != null)
+                        return FailedRequestCard(locationId: currentRequest.pickup.standId);
                       else if (currentRequest.drop != null)
                         return RecentDropCard(recentRequest: currentRequest);
                       else if (currentRequest.pickup.time != null)
