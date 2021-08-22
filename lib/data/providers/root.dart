@@ -8,10 +8,6 @@ import 'package:umbrella_client/data/repositories/StandRepo.dart';
 
 final authProvider = StreamProvider((_) => AuthRepo.getUser());
 
-final currentRequestIdProvider = StreamProvider<String?>((ref) {
-  return ref.read(authProvider.stream).map((user) => user?.requestId);
-});
-
 final requestProvider = StreamProvider.family<UmbrellaRequest?, String?>((ref, requestId) {
   if (requestId == null) return Stream.value(null);
   return RequestRepo.getUmbrellaRequest(requestId);

@@ -23,6 +23,10 @@ class Result<T> with _$Result<T> {
     return when((value) => value, error: (e) => throw e, loading: () => throw LoadingErr());
   }
 
+  Result<E> mapData<E>(E Function(T value) predicate) {
+    return when((value) => Result(predicate(value)), error: (e) => Result.error(e), loading: () => Result.loading());
+  }
+
   // TODO: this won't be necessary
   static E getOrThrowErr<E>(Result<E>? result) {
     if (result == null) throw "Result<$E> is null";

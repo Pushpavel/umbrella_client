@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:umbrella_client/data/providers/root.dart';
 import 'package:umbrella_client/helpers/extensions/providerExtensions.dart';
+import 'package:umbrella_client/pages/auth/UserAvatar.dart';
+import 'package:umbrella_client/resources/AppScreens.dart';
 
 class ProfileTopbar extends StatelessWidget {
   const ProfileTopbar({Key? key}) : super(key: key);
@@ -16,30 +18,30 @@ class ProfileTopbar extends StatelessWidget {
           child: CircularProgressIndicator(),
         );
 
-      return Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-              child: Text(
-                "Hi\n" + user.name,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.headline5,
+      return InkWell(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(32),
+          bottomRight: Radius.circular(32),
+          topLeft: Radius.circular(8),
+          bottomLeft: Radius.circular(8),
+        ),
+        splashFactory: InkRipple.splashFactory,
+        onTap: () => Navigator.of(context).push(AppScreens.profileScreen()),
+        child: Container(
+          padding: EdgeInsets.all(8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: Text(
+                  "Hi\n" + user.name,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.headline5,
+                ),
               ),
-            ),
-            user.auth.photoURL != null
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(24.0),
-                    child: Image.network(
-                      user.auth.photoURL!,
-                      height: 48.0,
-                      width: 48.0,
-                    ),
-                  )
-                : CircleAvatar(
-                    child: Icon(Icons.account_circle),
-                  )
-          ],
+              UserAvatar(user: user, radius: 24),
+            ],
+          ),
         ),
       );
     });
