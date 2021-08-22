@@ -11,59 +11,56 @@ class RecentPickupCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => print("clicked"),
-      child: Consumer(
-        builder: (context, ref, child) {
-          final stands = ref.watch(standProvider(recentRequest!.pickup.standId)).asResult().getOrNull();
+    return Consumer(
+      builder: (context, ref, child) {
+        final stands = ref.watch(standProvider(recentRequest!.pickup.standId)).asResult().getOrNull();
 
-          if (stands == null) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+        if (stands == null) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
 
-          return Container(
-            margin: EdgeInsets.only(bottom: 16),
-            child: Card(
-              color: Theme.of(context).accentColor,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(right: 16),
-                          child: CircleAvatar(
-                            child: Icon(
-                              Icons.arrow_upward,
-                              color: Color.fromRGBO(4, 255, 195, 1),
-                            ),
-                            backgroundColor: Color.fromRGBO(85, 85, 85, 1),
+        return Container(
+          margin: EdgeInsets.only(bottom: 16),
+          child: Card(
+            color: Theme.of(context).accentColor,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(right: 16),
+                        child: CircleAvatar(
+                          child: Icon(
+                            Icons.arrow_upward,
+                            color: Color.fromRGBO(4, 255, 195, 1),
                           ),
+                          backgroundColor: Color.fromRGBO(85, 85, 85, 1),
                         ),
-                        Flexible(
-                          child: Text(
-                            "You have successfully picked up the Umbrella",
-                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 18),
-                          ),
+                      ),
+                      Flexible(
+                        child: Text(
+                          "You have successfully picked up the Umbrella",
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 18),
                         ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    LocationStep(stands.name, recentRequest?.pickup.time?.millisecondsSinceEpoch)
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  LocationStep(stands.name, recentRequest?.pickup.time?.millisecondsSinceEpoch)
+                ],
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
