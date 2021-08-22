@@ -130,7 +130,7 @@ jobs:
     needs: [ ci,build ]
     steps:
       - name: Generate What's New file
-        run: echo ${{ needs.build.outputs.release_notes }} > whatsnew-en-US
+        run: echo "${{ needs.build.outputs.release_notes }}" > whatsnew-en-US
 
       - name: Download aab-artifact
         uses: actions/download-artifact@v2.0.10
