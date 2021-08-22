@@ -8,6 +8,7 @@ import 'package:umbrella_client/pages/home/ProfileTopbar.dart';
 import 'package:umbrella_client/pages/home/RecentDropCard.dart';
 import 'package:umbrella_client/pages/home/RecentPickupCard.dart';
 import 'package:umbrella_client/pages/home/RecentRequestCard.dart';
+import 'package:umbrella_client/resources/AppScreens.dart';
 import 'package:umbrella_client/widgets/PrimaryButton.dart';
 import 'package:umbrella_client/helpers/extensions/providerExtensions.dart';
 
@@ -83,7 +84,7 @@ class _HomeScreenView extends HookConsumerWidget {
                   alignment: Alignment.bottomCenter,
                   child: PrimaryButton(
                     label: Text("GRAB AN UMBRELLA"),
-                    onPressed: () => null,
+                    onPressed: () => Navigator.of(context).push(AppScreens.selectStandScreen()),
                     trailing: Icon(Icons.keyboard_arrow_right),
                   ),
                 )
