@@ -27,9 +27,9 @@ class NavDelegate extends SinglePageRouterDelegate {
         return requestResult.when(
           (request) {
             // user with no request
-            if (request == null) return HomeScreen();
+            return HomeScreen(user: userResult.getOrNull());
 
-            // user with request
+           /*  // user with request
             switch (request.status) {
               case UmbrellaRequestStatus.REQUESTED:
                 return PickupScreen();
@@ -39,7 +39,7 @@ class NavDelegate extends SinglePageRouterDelegate {
                 return ErrorScreen(
                   err: InternalErr("Current Umbrella Request Status must not be ${request.status}"),
                 );
-            }
+            } */
           },
           error: (e) => ErrorScreen(err: e),
           loading: () => LoadingScreen(),

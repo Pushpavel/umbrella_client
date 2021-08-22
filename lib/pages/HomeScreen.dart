@@ -1,85 +1,114 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:umbrella_client/data/models/Stand.dart';
-import 'package:umbrella_client/data/repositories/AuthRepo.dart';
-import 'package:umbrella_client/data/repositories/UmbrellaRepo.dart';
-import 'package:umbrella_client/data/services/HomeScreenViewModel.dart';
-import 'package:umbrella_client/data/services/StandService.dart';
-import 'package:umbrella_client/helpers/DisposableProvider.dart';
-import 'package:umbrella_client/helpers/extensions/ContextExtensions.dart';
-import 'package:umbrella_client/widgets/SelectedStandCard.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
+import 'package:umbrella_client/data/models/UmbrellaUser.dart';
+import 'package:umbrella_client/data/providers/root.dart';
+import 'package:umbrella_client/widgets/Home/ProfileTopbar.dart';
+import 'package:umbrella_client/widgets/Home/RecentDropCard.dart';
+import 'package:umbrella_client/widgets/Home/RecentPickupCard.dart';
+import 'package:umbrella_client/widgets/Home/RecentRequestCard.dart';
+import 'package:umbrella_client/widgets/PrimaryButton.dart';
+import 'package:umbrella_client/helpers/extensions/providerExtensions.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:umbrella_client/helpers/errors/Err.dart';
 
 class HomeScreen extends StatelessWidget {
+  HomeScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        DisposableProvider(create: (_) => StandService()),
-        DisposableProvider(create: (context) => HomeScreenViewModel(context))
-      ],
-      child: _HomeScreenView(),
-    );
+    return _HomeScreenView();
   }
 }
 
-class _HomeScreenView extends StatelessWidget {
+class _HomeScreenView extends HookConsumerWidget {
+  _HomeScreenView({
+    Key? key,
+  }) : super(key: key);
+
   final isLoading = ValueNotifier(false);
 
+  Widget getStatusCard(UmbrellaRequest currentRequest) {
+    if (currentRequest.drop != null) {
+      return RecentDropCard(
+        recentRequest: currentRequest,
+      );
+    } else if (currentRequest.pickup.time != null) {
+      return RecentPickupCard(
+        recentRequest: currentRequest,
+      );
+    } else {
+      return RecentRequestCard(
+        locationId: currentRequest.pickup.standId,
+        requestTimeout: currentRequest.requestTime,
+      );
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
-    final model = context.get<HomeScreenViewModel>();
-    final standService = context.get<StandService>();
+  Widget build(BuildContext context, ref) {
+    final requestId = ref.watch(currentRequestIdProvider).asResult().getOrNull();
 
-    return Scaffold(
-      body: ValueListenableBuilder<bool>(
-        valueListenable: isLoading,
-        builder: (context, loading, _) {
-          if (loading) return Center(child: CircularProgressIndicator());
+    if (requestId == null)
+      return Center(
+        child: CircularProgressIndicator(),
+      );
 
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SelectedStandCard(
-                selectedStandId$: model.selectedStandId$,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  AuthRepo.signOut();
-                },
-                child: Text("Sign Out"),
-              ),
-              Container(
-                padding: EdgeInsets.all(32),
-                alignment: Alignment.bottomCenter,
-                child: StreamBuilder<Stand?>(
-                    stream: model.selectedStandId$.switchMap((standId) => standService.getStand(standId)),
-                    builder: (context, snapshot) {
-                      final enabled = snapshot.data?.requestId == null;
+    UmbrellaRequest? currentRequest = ref.watch(requestProvider("6iU7y7hFzEapmgNHyC1k")).asResult().getOrNull();
 
-                      return FloatingActionButton.extended(
-                        icon: Icon(Icons.umbrella),
-                        label: Text("REQUEST UMBRELLA"),
-                        onPressed: enabled
-                            ? () async {
-                                final selectedStandId = model.selectedStandId$.value;
-                                isLoading.value = true;
-                                final success = await UmbrellaRepo.requestUmbrellaPickup(selectedStandId);
-                                if (!success) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text("Request Failed")),
-                                  );
-                                  isLoading.value = false;
-                                }
-                              }
-                            : null,
-                      );
-                    }),
-              )
-            ],
-          );
-        },
+    return SafeArea(
+      child: Scaffold(
+        body: ValueListenableBuilder<bool>(
+            valueListenable: isLoading,
+            builder: (context, loading, _) {
+              if (loading) return Center(child: CircularProgressIndicator());
+
+              try {
+                return Stack(alignment: Alignment.center, fit: StackFit.expand, children: [
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          ProfileTopbar(),
+                          SizedBox(
+                            height: 48,
+                          ),
+                          if (currentRequest == null)
+                            Container(
+                              child: Center(
+                                child: Text("No requests"),
+                              ),
+                            )
+                          else
+                            getStatusCard(currentRequest),
+                          SizedBox(
+                            height: 48,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    child: Container(
+                      margin: EdgeInsets.all(16),
+                      child: PrimaryButton(
+                        label: Text("GRAB AN UMBRELLA"),
+                        onPressed: () => null,
+                        trailing: Icon(Icons.keyboard_arrow_right),
+                      ),
+                    ),
+                  )
+                ]);
+              } on LoadingErr {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }),
       ),
     );
   }
