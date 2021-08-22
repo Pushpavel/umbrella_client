@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
 import 'package:umbrella_client/data/providers/root.dart';
+import 'package:umbrella_client/helpers/result/Result.dart';
+import 'package:umbrella_client/pages/ErrorScreen.dart';
 import 'package:umbrella_client/pages/home/ProfileTopbar.dart';
 import 'package:umbrella_client/pages/home/RecentDropCard.dart';
 import 'package:umbrella_client/pages/home/RecentPickupCard.dart';
 import 'package:umbrella_client/pages/home/RecentRequestCard.dart';
 import 'package:umbrella_client/widgets/PrimaryButton.dart';
 import 'package:umbrella_client/helpers/extensions/providerExtensions.dart';
-import 'package:umbrella_client/helpers/errors/Err.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return _HomeScreenView();
@@ -44,69 +46,50 @@ class _HomeScreenView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final requestId = ref.watch(currentRequestIdProvider).asResult().getOrNull();
+    final requestId = ref.watch(authProvider).asResult().mapData((user) => user?.requestId);
 
-    if (requestId == null)
-      return Center(
-        child: CircularProgressIndicator(),
-      );
+    if (requestId is Loading) return Scaffold();
 
-    UmbrellaRequest? currentRequest = ref.watch(requestProvider("6iU7y7hFzEapmgNHyC1k")).asResult().getOrNull();
+    final currentRequestResult = ref.watch(requestProvider(requestId.getOrNull())).asResult();
 
     return SafeArea(
       child: Scaffold(
-        body: ValueListenableBuilder<bool>(
-            valueListenable: isLoading,
-            builder: (context, loading, _) {
-              if (loading) return Center(child: CircularProgressIndicator());
+        body: Padding(
+          padding: EdgeInsets.all(24),
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  ProfileTopbar(),
+                  SizedBox(height: 48),
+                  currentRequestResult.when(
+                    (value) {
+                      if (value == null)
+                        return Center(
+                          child: Text("No Requests"),
+                        );
 
-              try {
-                return Stack(alignment: Alignment.center, fit: StackFit.expand, children: [
-                  SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          ProfileTopbar(),
-                          SizedBox(
-                            height: 48,
-                          ),
-                          if (currentRequest == null)
-                            Container(
-                              child: Center(
-                                child: Text("No requests"),
-                              ),
-                            )
-                          else
-                            getStatusCard(currentRequest),
-                          SizedBox(
-                            height: 48,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    child: Container(
-                      margin: EdgeInsets.all(16),
-                      child: PrimaryButton(
-                        label: Text("GRAB AN UMBRELLA"),
-                        onPressed: () => null,
-                        trailing: Icon(Icons.keyboard_arrow_right),
-                      ),
+                      return getStatusCard(value);
+                    },
+                    error: (e) => ErrorScreen(err: e),
+                    loading: () => Center(
+                      child: CircularProgressIndicator(),
                     ),
                   )
-                ]);
-              } on LoadingErr {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            }),
+                ],
+              ),
+              if (currentRequestResult.getOrNull() == null)
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: PrimaryButton(
+                    label: Text("GRAB AN UMBRELLA"),
+                    onPressed: () => null,
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                  ),
+                )
+            ],
+          ),
+        ),
       ),
     );
   }
