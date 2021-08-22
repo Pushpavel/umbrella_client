@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:umbrella_client/data/models/UmbrellaRequest.dart';
 import 'package:umbrella_client/data/providers/root.dart';
 import 'package:umbrella_client/helpers/result/Result.dart';
 import 'package:umbrella_client/pages/ErrorScreen.dart';
@@ -22,28 +21,7 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _HomeScreenView extends HookConsumerWidget {
-  _HomeScreenView({
-    Key? key,
-  }) : super(key: key);
-
-  final isLoading = ValueNotifier(false);
-
-  Widget getStatusCard(UmbrellaRequest currentRequest) {
-    if (currentRequest.drop != null) {
-      return RecentDropCard(
-        recentRequest: currentRequest,
-      );
-    } else if (currentRequest.pickup.time != null) {
-      return RecentPickupCard(
-        recentRequest: currentRequest,
-      );
-    } else {
-      return RecentRequestCard(
-        locationId: currentRequest.pickup.standId,
-        requestTimeout: currentRequest.requestTime,
-      );
-    }
-  }
+  const _HomeScreenView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, ref) {
@@ -55,41 +33,50 @@ class _HomeScreenView extends HookConsumerWidget {
 
     return SafeArea(
       child: Scaffold(
-        body: Padding(
-          padding: EdgeInsets.all(24),
-          child: Stack(
-            children: [
-              Column(
-                children: [
-                  ProfileTopbar(),
-                  SizedBox(height: 48),
-                  currentRequestResult.when(
-                    (value) {
-                      if (value == null)
-                        return Center(
-                          child: Text("No Requests"),
+        body: Stack(
+          children: [
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(18),
+                  child: ProfileTopbar(),
+                ),
+                SizedBox(height: 24),
+                Padding(
+                  padding: EdgeInsets.all(24),
+                  child: currentRequestResult.when(
+                    (currentRequest) {
+                      if (currentRequest == null)
+                        return Center(child: Text("No Requests"));
+                      else if (currentRequest.drop != null)
+                        return RecentDropCard(recentRequest: currentRequest);
+                      else if (currentRequest.pickup.time != null)
+                        return RecentPickupCard(recentRequest: currentRequest);
+                      else
+                        return RecentRequestCard(
+                          locationId: currentRequest.pickup.standId,
+                          requestTimeout: currentRequest.requestTime,
                         );
-
-                      return getStatusCard(value);
                     },
                     error: (e) => ErrorScreen(err: e),
                     loading: () => Center(
                       child: CircularProgressIndicator(),
                     ),
-                  )
-                ],
-              ),
-              if (currentRequestResult.getOrNull() == null)
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: PrimaryButton(
-                    label: Text("GRAB AN UMBRELLA"),
-                    onPressed: () => Navigator.of(context).push(AppScreens.selectStandScreen()),
-                    trailing: Icon(Icons.keyboard_arrow_right),
                   ),
                 )
-            ],
-          ),
+              ],
+            ),
+            if (currentRequestResult.getOrNull() == null)
+              Container(
+                alignment: Alignment.bottomCenter,
+                padding: EdgeInsets.all(24),
+                child: PrimaryButton(
+                  label: Text("GRAB AN UMBRELLA"),
+                  onPressed: () => Navigator.of(context).push(AppScreens.selectStandScreen()),
+                  trailing: Icon(Icons.keyboard_arrow_right),
+                ),
+              )
+          ],
         ),
       ),
     );
