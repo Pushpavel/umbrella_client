@@ -14,6 +14,7 @@ class Result<T> with _$Result<T> {
 
   const factory Result.loading() = Loading;
 
+  // fixme: error gets missed
   T? getOrNull() {
     return when((value) => value, error: (e) => null, loading: () => null);
   }
@@ -22,6 +23,7 @@ class Result<T> with _$Result<T> {
     return when((value) => value, error: (e) => throw e, loading: () => throw LoadingErr());
   }
 
+  // TODO: this won't be necessary
   static E getOrThrowErr<E>(Result<E>? result) {
     if (result == null) throw "Result<$E> is null";
 

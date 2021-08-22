@@ -1,21 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:umbrella_client/data/models/UmbrellaPickupState.dart';
-import 'package:umbrella_client/data/models/UmbrellaRequest_.dart';
 
 class UmbrellaRepo {
-  static Stream<UmbrellaRequest_?> getUmbrellaRequest(String requestId) {
-    final query = FirebaseFirestore.instance.collection("Requests").doc(requestId);
-
-    return query.snapshots().map(
-      (snap) {
-        if (!snap.exists) return null;
-        return UmbrellaRequest_.fromFirestore(snap);
-      },
-    );
-  }
-
   static Stream<UmbrellaPickupState?> getUmbrellaPickupState(String standId) {
     final query = FirebaseDatabase.instance.reference().child("activeStandRequests").child(standId).child("request");
 
