@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:umbrella_client/data/providers/root.dart';
 import 'package:umbrella_client/helpers/extensions/providerExtensions.dart';
-import 'package:umbrella_client/pages/pickup/PickupCard.dart';
-import 'package:umbrella_client/helpers/extensions/AsyncSnapshotExtension.dart';
 
-class RecentRequestCard extends StatefulWidget {
+class FailedRequestCard extends StatefulWidget {
   final String locationId;
-  final DateTime requestTimeout;
-  const RecentRequestCard({Key? key, required this.locationId, required this.requestTimeout}) : super(key: key);
+
+  const FailedRequestCard({Key? key, required this.locationId}) : super(key: key);
 
   @override
-  _RecentRequestCardState createState() => _RecentRequestCardState();
+  _FailedRequestCardState createState() => _FailedRequestCardState();
 }
 
-class _RecentRequestCardState extends State<RecentRequestCard> {
+class _FailedRequestCardState extends State<FailedRequestCard> {
   @override
   Widget build(BuildContext context) {
     return Consumer(
@@ -41,19 +39,9 @@ class _RecentRequestCardState extends State<RecentRequestCard> {
                       Container(
                         margin: EdgeInsets.only(right: 16),
                         child: CircleAvatar(
-                          child: StreamBuilder<int?>(
-                            stream: _timeoutStream(widget.requestTimeout),
-                            builder: (context, snapshot) {
-                              final time = snapshot.asResult().getOrNull();
-                              if (time == null)
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              return Text(
-                                time.toString(),
-                                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
-                              );
-                            },
+                          child: Icon(
+                            Icons.close,
+                            color: Color.fromRGBO(4, 255, 195, 1),
                           ),
                           backgroundColor: Color.fromRGBO(85, 85, 85, 1),
                         ),
@@ -62,7 +50,7 @@ class _RecentRequestCardState extends State<RecentRequestCard> {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "Pickup the Umbrella",
+                            "Failed",
                             style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 18),
                           ),
                         ),
@@ -108,15 +96,5 @@ class _RecentRequestCardState extends State<RecentRequestCard> {
         );
       },
     );
-  }
-
-  Stream<int?> _timeoutStream(DateTime start) async* {
-    Duration time = DateTime.now().difference(start);
-    while (time.inSeconds <= TIMEOUT_SECONDS) {
-      yield TIMEOUT_SECONDS - time.inSeconds;
-      await Future.delayed(Duration(seconds: 1));
-      time = DateTime.now().difference(start);
-    }
-    yield null;
   }
 }

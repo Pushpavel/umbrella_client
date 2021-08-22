@@ -14,9 +14,15 @@ class Result<T> with _$Result<T> {
 
   const factory Result.loading() = Loading;
 
-  // fixme: error gets missed
   T? getOrNull() {
-    return when((value) => value, error: (e) => null, loading: () => null);
+    return when(
+      (value) => value,
+      error: (e) {
+        print("ERROR THROWN: $e\nstacktrace: ${e.stackTrace}");
+        return null;
+      },
+      loading: () => null,
+    );
   }
 
   T getOrThrow() {
