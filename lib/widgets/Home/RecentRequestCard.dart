@@ -23,12 +23,12 @@ class _RecentRequestCardState extends State<RecentRequestCard> {
       child: Consumer(
         builder: (context, ref, child) {
           final location = ref.watch(standProvider(this.widget.locationId)).asResult().getOrNull();
-    
+
           if (location == null)
             return Center(
               child: CircularProgressIndicator(),
             );
-    
+
           return Container(
             margin: EdgeInsets.only(bottom: 16),
             child: Card(
