@@ -83,6 +83,28 @@ jobs:
           if-no-files-found: error
 
 
+  internal_app_share:
+    name: Internal App Sharing
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Generate What's New file
+        run: echo "${{ github.event.release.body }}" > whatsnew-en-US
+
+      - name: Download aab-artifact
+        uses: actions/download-artifact@v2.0.10
+        with:
+          name: aab-artifact
+
+      - name: Publish to Google PlayStore
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: dev.project_umbrella.umbrella_client
+          releaseFiles: app-release.aab
+          track: internalsharing
+          whatsNewDirectory: ./
+
   publish:
     name: Publish to Google PlayStore
     runs-on: ubuntu-latest
