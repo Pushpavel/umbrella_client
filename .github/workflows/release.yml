@@ -102,7 +102,7 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: dev.project_umbrella.umbrella_client
           releaseFiles: app-release.aab
-          track: closed
+          track: alpha
           whatsNewDirectory: ./
 
 
